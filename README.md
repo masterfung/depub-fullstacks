@@ -1,1 +1,1 @@
-# depub-fullstacks
+# FreePub
