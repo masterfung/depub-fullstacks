@@ -3,6 +3,7 @@ import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import logo from '../static/img/beer.png';
 import Image from 'next/image';
+import Web3AuthConnector from './Web3AuthConnector';
 
 const navigation = [
     { name: 'Published', href: '/' },
@@ -15,7 +16,7 @@ const Navbar = () => {
     return (
         <div className="isolate bg-white">
       
-      <div className="px-6 pt-3 pb-3 lg:px-8">
+      <div className="lg:px-8">
         <nav className="flex items-center justify-between" aria-label="Global">
           <div className="flex lg:flex-1">
             <a href="/" className="-m-1.5 p-1.5 flex items-center">
@@ -41,9 +42,8 @@ const Navbar = () => {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            <Web3AuthConnector />
+            {/* will need to update the above to show connected vs published content */}
           </div>
         </nav>
         <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

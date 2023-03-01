@@ -39,6 +39,7 @@ const Footer = () => {
               </span>{' '}
               by FreePub &copy; {currentYear}
             </p>
+            <a href="https://www.flaticon.com/free-icons/beer" title="beer icons">Beer icons created by Freepik - Flaticon</a>
           </div>
         </div>
       </div>

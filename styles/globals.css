@@ -54,7 +54,7 @@ main {
 
 .card {
 	margin: 0.5rem;
-	padding: 0.7rem;
+	padding: 0.5rem;
 	text-align: center;
 	color: #0070f3;
 	background-color: #fafafa;
@@ -121,3 +121,7 @@ main {
 	font-size: 16px;
 	font-family: monospace;
 }
+
+.gradient {
+	background-image: linear-gradient(to right, #000, #fff);
+  }

@@ -1,299 +1,93 @@
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
-import { MetamaskAdapter } from "@web3auth/metamask-adapter";
-import { Web3Auth } from "@web3auth/modal";
-import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
-// import RPC from ".api/ethersRPC"; // for using ethers.js
-// Plugins
-import { TorusWalletConnectorPlugin } from "@web3auth/torus-wallet-connector-plugin";
-// Adapters
-import { WalletConnectV1Adapter } from "@web3auth/wallet-connect-v1-adapter";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import logo from '../static/img/beer.png';
+import Cards from "../components/Cards";
+
 import Layout from "../components/Layout";
 
-import RPC from "./api/web3RPC"; // for using web3.js
 import SearchBar from "../components/SearchBar";
 
-const clientId = "BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk"; // get from https://dashboard.web3auth.io
+const CARDS_DATA = [
+  {
+    id: 1,
+    title: "Card 1",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut volutpat magna.",
+    author: "John Doe",
+    version: "1.0.0"
+  },
+  {
+    id: 2,
+    title: "Card 2",
+    description: "Pellentesque in eros vestibulum, ultrices ipsum sed, semper lectus. Sed sit amet sollicitudin arcu.",
+    author: "Jane Doe",
+    version: "1.1.0"
+  },
+  {
+    id: 3,
+    title: "Card 3",
+    description: "Donec vitae eros ac dolor blandit fermentum. Nulla facilisi. Nulla facilisi.",
+    author: "Bob Smith",
+    version: "2.0.0"
+  },
+  {
+    id: 4,
+    title: "Card 4",
+    description: "Aliquam tempus nunc in nunc viverra, a mattis risus convallis. Proin volutpat turpis at libero dictum vulputate.",
+    author: "Sarah Johnson",
+    version: "1.2.3"
+  },
+  {
+    id: 5,
+    title: "Card 5",
+    description: "Curabitur consequat faucibus leo, ac aliquet purus mattis sed. Suspendisse potenti.",
+    author: "David Lee",
+    version: "2.1.0"
+  },
+  {
+    id: 6,
+    title: "Card 6",
+    description: "Vestibulum laoreet tortor eu tincidunt ultrices. Integer at lectus euismod, lobortis ante vel, varius nunc.",
+    author: "Emily Davis",
+    version: "1.0.1"
+  },
+  {
+    id: 7,
+    title: "Card 7",
+    description: "Mauris lacinia libero sit amet justo consectetur, sed dignissim neque aliquet. Aliquam ac tristique est.",
+    author: "Adam Smith",
+    version: "3.0.0"
+  },
+  {
+    id: 8,
+    title: "Card 8",
+    description: "Ut et odio nec dolor congue bibendum. Nunc euismod tellus quis neque dictum ullamcorper.",
+    author: "Olivia Johnson",
+    version: "2.2.0"
+  },
+  {
+    id: 9,
+    title: "Card 9",
+    description: "Morbi eget dolor euismod, vehicula dolor non, mattis nisl. In non ex eu dolor posuere fermentum.",
+    author: "Michael Kim",
+    version: "1.3.0"
+  },
+  {
+    id: 10,
+    title: "Card 10",
+    description: "Phasellus sit amet nibh in ipsum venenatis dictum vel id dui. Morbi sagittis orci eget velit dictum interdum.",
+    author: "Amanda Lee",
+    version: "2.3.1"
+  }
+]
+
 
 function App() {
-  const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
-  const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const web3auth = new Web3Auth({
-          clientId,
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x1",
-            rpcTarget: "https://rpc.ankr.com/eth", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          },
-          web3AuthNetwork: "cyan",
-        });
-
-        // plugins and adapters are optional and can be added as per your requirement
-        // read more about plugins here: https://web3auth.io/docs/sdk/web/plugins/
-
-        // adding torus wallet connector plugin
-
-        const torusPlugin = new TorusWalletConnectorPlugin({
-          torusWalletOpts: {},
-          walletInitOptions: {
-            whiteLabel: {
-              theme: { isDark: true, colors: { primary: "#00a8ff" } },
-              logoDark: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
-              logoLight: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
-            },
-            useWalletConnect: true,
-            enableLogging: true,
-          },
-        });
-        await web3auth.addPlugin(torusPlugin);
-
-        // read more about adapters here: https://web3auth.io/docs/sdk/web/adapters/
-
-        // adding wallet connect v1 adapter
-
-        const walletConnectV1Adapter = new WalletConnectV1Adapter({
-          adapterSettings: {
-            bridge: "https://bridge.walletconnect.org",
-          },
-          clientId,
-        });
-
-        web3auth.configureAdapter(walletConnectV1Adapter);
-
-        // adding metamask adapter
-
-        const metamaskAdapter = new MetamaskAdapter({
-          clientId,
-          sessionTime: 3600, // 1 hour in seconds
-          web3AuthNetwork: "cyan",
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x1",
-            rpcTarget: "https://rpc.ankr.com/eth", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          },
-        });
-        // we can change the above settings using this function
-        metamaskAdapter.setAdapterSettings({
-          sessionTime: 86400, // 1 day in seconds
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x89",
-            rpcTarget: "https://rpc-mainnet.matic.network", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          },
-          web3AuthNetwork: "cyan",
-        });
-
-        // it will add/update  the metamask adapter in to web3auth class
-        web3auth.configureAdapter(metamaskAdapter);
-
-        const torusWalletAdapter = new TorusWalletAdapter({
-          clientId,
-        });
-
-        // it will add/update  the torus-evm adapter in to web3auth class
-        web3auth.configureAdapter(torusWalletAdapter);
-
-        setWeb3auth(web3auth);
-
-        await web3auth.initModal();
-        if (web3auth.provider) {
-          setProvider(web3auth.provider);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    init();
-  }, []);
-
-  const login = async () => {
-    if (!web3auth) {
-      uiConsole("web3auth not initialized yet");
-      return;
-    }
-    const web3authProvider = await web3auth.connect();
-    setProvider(web3authProvider);
-    uiConsole("Logged in Successfully!");
-  };
-
-  const authenticateUser = async () => {
-    if (!web3auth) {
-      uiConsole("web3auth not initialized yet");
-      return;
-    }
-    const idToken = await web3auth.authenticateUser();
-    uiConsole(idToken);
-  };
-
-  const getUserInfo = async () => {
-    if (!web3auth) {
-      uiConsole("web3auth not initialized yet");
-      return;
-    }
-    const user = await web3auth.getUserInfo();
-    uiConsole(user);
-  };
-
-  const logout = async () => {
-    if (!web3auth) {
-      uiConsole("web3auth not initialized yet");
-      return;
-    }
-    await web3auth.logout();
-    setProvider(null);
-  };
-
-  const getChainId = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const chainId = await rpc.getChainId();
-    uiConsole(chainId);
-  };
-  const getAccounts = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const address = await rpc.getAccounts();
-    uiConsole(address);
-  };
-
-  const getBalance = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const balance = await rpc.getBalance();
-    uiConsole(balance);
-  };
-
-  const sendTransaction = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const receipt = await rpc.sendTransaction();
-    uiConsole(receipt);
-  };
-
-  const signMessage = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const signedMessage = await rpc.signMessage();
-    uiConsole(signedMessage);
-  };
-
-  const getPrivateKey = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const privateKey = await rpc.getPrivateKey();
-    uiConsole(privateKey);
-  };
-
-  function uiConsole(...args: any[]): void {
-    const el = document.querySelector("#console>p");
-    if (el) {
-      el.innerHTML = JSON.stringify(args || {}, null, 2);
-    }
-  }
-
-  const loggedInView = (
-    <>
-      <div className="flex-container">
-        <div>
-          <button onClick={getUserInfo} className="card">
-            Get User Info
-          </button>
-        </div>
-        <div>
-          <button onClick={authenticateUser} className="card">
-            Get ID Token
-          </button>
-        </div>
-        <div>
-          <button onClick={getChainId} className="card">
-            Get Chain ID
-          </button>
-        </div>
-        <div>
-          <button onClick={getAccounts} className="card">
-            Get Accounts
-          </button>
-        </div>
-        <div>
-          <button onClick={getBalance} className="card">
-            Get Balance
-          </button>
-        </div>
-        <div>
-          <button onClick={sendTransaction} className="card">
-            Send Transaction
-          </button>
-        </div>
-        <div>
-          <button onClick={signMessage} className="card">
-            Sign Message
-          </button>
-        </div>
-        <div>
-          <button onClick={getPrivateKey} className="card">
-            Get Private Key
-          </button>
-        </div>
-        <div>
-          <button onClick={logout} className="card">
-            Log Out
-          </button>
-        </div>
-      </div>
-      <div id="console" style={{ whiteSpace: "pre-line" }}>
-        <p style={{ whiteSpace: "pre-line" }}></p>
-      </div>
-    </>
-  );
-
-  const unloggedInView = (
-    <button onClick={login} className="card">
-      Login
-    </button>
-  );
 
   return (
     <Layout>
 
-      <div className="grid">{provider ? loggedInView : unloggedInView}</div>
-
       <SearchBar />
-      
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
-        <div className="shrink-0">
-          <Image className="h-12 w-12" src={logo} alt="ChitChat Logo" height="30" width="30" />
-        </div>
-        
-        <div>
-          <div className="text-xl font-medium text-black">ChitChat</div>
-          <p className="text-slate-500">You have a new message!</p>
-        </div>
-      </div>
+
+      <Cards cards={CARDS_DATA} />
+
     </Layout>
   );
 }
