@@ -13,6 +13,7 @@ import logo from '../static/img/beer.png';
 import Layout from "../components/Layout";
 
 import RPC from "./api/web3RPC"; // for using web3.js
+import SearchBar from "../components/SearchBar";
 
 const clientId = "BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk"; // get from https://dashboard.web3auth.io
 
@@ -281,10 +282,13 @@ function App() {
 
       <div className="grid">{provider ? loggedInView : unloggedInView}</div>
 
+      <SearchBar />
+      
       <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
         <div className="shrink-0">
           <Image className="h-12 w-12" src={logo} alt="ChitChat Logo" height="30" width="30" />
         </div>
+        
         <div>
           <div className="text-xl font-medium text-black">ChitChat</div>
           <p className="text-slate-500">You have a new message!</p>
