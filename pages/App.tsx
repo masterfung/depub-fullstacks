@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Cards from "../components/Cards";
+import { CardsType } from "../types/app";
 
 import Layout from "../components/Layout";
 
@@ -80,11 +81,12 @@ const CARDS_DATA = [
 
 
 function App() {
+  const [updateData, setUpdateData] = useState([]);
 
   return (
     <Layout>
 
-      <SearchBar />
+      <SearchBar updateFunction={setUpdateData} endpoint="" />
 
       <Cards cards={CARDS_DATA} />
 

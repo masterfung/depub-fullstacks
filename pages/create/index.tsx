@@ -14,8 +14,7 @@ export default function Create() {
     <Layout>
         <div className="max-w-2xl mx-auto mt-3">
         <Form />
-    </div>
+        </div>
     </Layout>
-
   )
 }

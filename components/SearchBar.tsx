@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-const SearchBar = () => {
+const SearchBar = ({updateFunction, endpoint}: {updateFunction: Function, endpoint: string}) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // Call API with searchTerm
     console.log("Searching for:", searchTerm);
+    // use updateFunction here to update state.
   };
 
   return (

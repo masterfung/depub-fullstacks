@@ -40,7 +40,7 @@ const Layout = ({ children }: Props) => {
       </div>
 
       <Navbar />
-      <main>{children}</main>
+      <main className='p-2'>{children}</main>
       <Footer />
     </div>
   );

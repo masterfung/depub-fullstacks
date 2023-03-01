@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import Link from 'next/link';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -19,7 +20,7 @@ const Footer = () => {
                 <a href="#">Create</a>
               </li>
               <li>
-                <a href="#">About</a>
+                <Link href="/about"><a href="/about">About</a></Link>
               </li>
               <li>
                 <a href="#">
@@ -39,7 +40,7 @@ const Footer = () => {
               </span>{' '}
               by FreePub &copy; {currentYear}
             </p>
-            <a href="https://www.flaticon.com/free-icons/beer" title="beer icons">Beer icons created by Freepik - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/beer" target="_blank" title="beer icons">Beer icons created by Freepik - Flaticon</a>
           </div>
         </div>
       </div>
