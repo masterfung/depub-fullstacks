@@ -5,7 +5,7 @@ import Layout from "../../components/Layout";
 export default function Create() {
   return (
     <Layout>
-      <div className="flex mx-auto mt-3 border p-5 bg-white">
+      <div className="mt-3 border p-5 bg-white w-3/6 mx-auto">
         <Form isEdit={false} cid={undefined} />
       </div>
     </Layout>

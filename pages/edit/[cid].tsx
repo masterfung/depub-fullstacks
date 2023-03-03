@@ -10,7 +10,7 @@ export default function Edit() {
 
   return (
     <Layout>
-      <div className="flex mx-auto mt-3 border p-5 bg-white">
+      <div className="mt-3 border p-5 bg-white w-3/6 mx-auto">
         <Form isEdit={true} cid={cid as string} />
       </div>
     </Layout>

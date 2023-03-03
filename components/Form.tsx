@@ -31,7 +31,7 @@ const Form = ({
   // we move versioning and incrementing the backend by logic if no
 
   return (
-    <div className="max-w-2xl mx-auto w-[500px]">
+    <div className="max-w-2xl mx-auto ">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
@@ -40,7 +40,7 @@ const Form = ({
           <input
             type="text"
             {...register("title", { required: true })}
-            className="form-input w-full border-gray-400 border h-10"
+            className="form-input w-full border-gray-400 border h-10 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
           />
           {errors.title && (
             <div className="text-sm text-red-600">Please enter a title.</div>
@@ -55,7 +55,7 @@ const Form = ({
           </label>
           <textarea
             {...register("description", { required: true })}
-            className="form-textarea w-full border-gray-400 border"
+            className="form-textarea w-full border-gray-400 border h-24 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
           ></textarea>
           {errors.description && (
             <div className="text-sm text-red-600">
@@ -73,7 +73,7 @@ const Form = ({
           <input
             type="author"
             {...register("author", { required: false })}
-            className="form-input w-full border-gray-400 border h-10"
+            className="form-input w-full border-gray-400 border h-10 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
           />
         </div>
         <div className="mb-4">
@@ -104,6 +104,7 @@ const Form = ({
               id="file-upload"
               type="file"
               multiple
+              {...register("file")}
               onChange={onFileChange}
               className="sr-only"
             />
