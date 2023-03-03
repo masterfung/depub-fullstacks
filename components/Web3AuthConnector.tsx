@@ -10,7 +10,6 @@ import { WalletConnectV1Adapter } from "@web3auth/wallet-connect-v1-adapter";
 import { useEffect, useState, Fragment, useReducer } from "react";
 
 import RPC from "../pages/api/ethersRPC"; // for using web3.js
-import Modal from "react-modal";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 
