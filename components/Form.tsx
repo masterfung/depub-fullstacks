@@ -2,7 +2,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileSize } from "../types/utility";
 
-const Form = ({ isEdit, cid }: { isEdit: boolean; cid: string | undefined }) => {
+const Form = ({
+  isEdit,
+  cid,
+}: {
+  isEdit: boolean;
+  cid: string | undefined;
+}) => {
   const {
     register,
     handleSubmit,

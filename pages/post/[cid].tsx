@@ -91,51 +91,52 @@ const POSTS_DATA = [
 
 const Post = () => {
   const router = useRouter();
-  const { pid } = router.query as { pid: string } || { pid: "1" };
+  const { pid } = (router.query as { pid: string }) || { pid: "1" };
   const post = POSTS_DATA[parseInt(pid) - 1 || 1] || POSTS_DATA[1];
-  console.log('postData', post);
+  console.log("postData", post);
 
   // we will need to query the endpoint to get the data back from the cid/pid and display the data here
 
   return (
     <Layout>
       <div className="p-8 m-4 border-2 border-gray-200 rounded-lg">
-      <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-      <p className="text-gray-600 mb-4">{post.description}</p>
-      <div className="mb-4">
-        <span className="font-bold">Tags: </span>
-        {post.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="bg-gray-200 px-2 py-1 rounded-full text-sm font-semibold text-gray-700 mr-2"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-      <div className="mb-4">
-        <span className="font-bold">Author: </span>
-        <span className="text-gray-600">{post.author}</span>
-      </div>
-      <div className="mb-4">
-        <span className="font-bold">Files:</span>
-        <ul className="list-disc list-inside">
-          {post.files.map((file, index) => (
-            <li key={index}>
-              <span className="font-semibold">{file.name}</span> ({file.size}, {file.format})
-              <div className="ml-4">
-                <span className="font-bold">Versions:</span>{" "}
-                {file.versions.join(", ")}
-              </div>
-              <div className="ml-4">
-                <span className="font-bold">Published Date:</span>{" "}
-                {file.publishedDate}
-              </div>
-            </li>
+        <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+        <p className="text-gray-600 mb-4">{post.description}</p>
+        <div className="mb-4">
+          <span className="font-bold">Tags: </span>
+          {post.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="bg-gray-200 px-2 py-1 rounded-full text-sm font-semibold text-gray-700 mr-2"
+            >
+              {tag}
+            </span>
           ))}
-        </ul>
+        </div>
+        <div className="mb-4">
+          <span className="font-bold">Author: </span>
+          <span className="text-gray-600">{post.author}</span>
+        </div>
+        <div className="mb-4">
+          <span className="font-bold">Files:</span>
+          <ul className="list-disc list-inside">
+            {post.files.map((file, index) => (
+              <li key={index}>
+                <span className="font-semibold">{file.name}</span> ({file.size},{" "}
+                {file.format})
+                <div className="ml-4">
+                  <span className="font-bold">Versions:</span>{" "}
+                  {file.versions.join(", ")}
+                </div>
+                <div className="ml-4">
+                  <span className="font-bold">Published Date:</span>{" "}
+                  {file.publishedDate}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
     </Layout>
   );
 };

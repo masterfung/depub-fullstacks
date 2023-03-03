@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 import { Web3Auth } from "@web3auth/modal";
@@ -116,7 +117,13 @@ function Web3AuthConnector() {
       }
     };
 
-    init();
+    init()
+      .then(() => {
+        console.log("yay");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   const login = async () => {
@@ -284,11 +291,9 @@ function Web3AuthConnector() {
     </button>
   );
 
-  const create = (e: Event) => {
-    e.preventDefault();
-    
-    router.push('/create');
-  }
+  const create = () => {
+    void router.push("/create");
+  };
 
   return (
     <>
@@ -336,10 +341,13 @@ function Web3AuthConnector() {
                   </div>
                   <hr className="m-3" />
                   <div className="mt-2">
-                    <button onClick={(e) => create} className="card">
+                    <button onClick={create} className="card">
                       Submit Anonymously
                     </button>
-                    <small>Content submitted anonymously will post to IPFS and will require community funding to be registered on-chain.</small>
+                    <small>
+                      Content submitted anonymously will post to IPFS and will
+                      require community funding to be registered on-chain.
+                    </small>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

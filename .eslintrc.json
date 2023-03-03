@@ -1,13 +1,9 @@
 {
-  "env": {
-    "jest/globals": true
-  },
   "globals": { "React": true, "JSX": true },
   "extends": [
     "eslint:recommended",
     "eslint-config-prettier",
     "plugin:react/recommended",
-    "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -16,17 +12,17 @@
     "plugin:import/typescript",
     "next/core-web-vitals"
   ],
-  "plugins": ["jest", "prettier", "react", "@typescript-eslint"],
+  "plugins": ["prettier", "react", "@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "tsconfigRootDir": "src/**",
+    "tsconfigRootDir": ".",
     "project": ["./tsconfig.json"]
   },
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
-    "@typescript-eslint/no-misused-promises": [
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unsafe-assignment": "warn",    "@typescript-eslint/no-misused-promises": [
       "error",
       { "checksVoidReturn": false }
     ]

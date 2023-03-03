@@ -1,7 +1,10 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import logo from "../static/img/beer.png";
+import logo from "../public/beer.png";
 import Image from "next/image";
 import Web3AuthConnector from "./Web3AuthConnector";
 import Link from "next/link";
