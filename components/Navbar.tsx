@@ -1,34 +1,36 @@
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import logo from '../static/img/beer.png';
-import Image from 'next/image';
-import Web3AuthConnector from './Web3AuthConnector';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import logo from "../static/img/beer.png";
+import Image from "next/image";
+import Web3AuthConnector from "./Web3AuthConnector";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import LoginModal from "./LoginModal";
 
 const navigation = [
-    { id: 1, name: 'Published', href: '/' },
-    { id: 2, name: 'Pending', href: '/pending' },
-  ]
+  { id: 1, name: "Published", href: "/" },
+  { id: 2, name: "Pending", href: "/pending" },
+];
 
 const Navbar = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const router = useRouter();
-    const {pid} = router.query; 
-    console.log('Router', router.pathname);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const { cid } = router.query;
+  console.log("Router", router.pathname);
 
-    return (
-        <div className="isolate bg-white">
-      
-      <div className="lg:px-8">
+  return (
+    <div className="isolate bg-white">
+      <div className="lg:px-8 p-3">
         <nav className="flex items-center justify-between" aria-label="Global">
           <div className="flex lg:flex-1">
             <Link href="/">
-                <a href="/" className="-m-1.5 p-1.5 flex items-center">
+              <a href="/" className="-m-1.5 p-1.5 flex items-center">
                 <Image src={logo} alt="FreePub Logo" height="30" width="30" />
-                <span className='pl-2'><b>FreePub</b></span>
-                </a>
+                <span className="pl-2">
+                  <b>FreePub</b>
+                </span>
+              </a>
             </Link>
           </div>
           <div className="flex lg:hidden">
@@ -42,19 +44,19 @@ const Navbar = () => {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-          <Link key={item.name} href={item.href}>
-            <a
-              className={`mx-4 font-medium hover:text-blue-600 ${
-                router.pathname === item.href
-                  ? 'text-blue-900 border-b-2 border-blue-800 pb-2'
-                  : 'text-blue-500'
-              }`}
-            >
-              {item.name}
-            </a>
-          </Link>
-        ))}
+            {navigation.map((item) => (
+              <Link key={item.name} href={item.href}>
+                <a
+                  className={`mx-4 font-medium hover:text-blue-600 ${
+                    router.pathname === item.href
+                      ? "text-blue-900 border-b-2 border-blue-800 pb-2"
+                      : "text-blue-500"
+                  }`}
+                >
+                  {item.name}
+                </a>
+              </Link>
+            ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <Web3AuthConnector />
@@ -66,10 +68,12 @@ const Navbar = () => {
             <div className="flex items-center justify-between">
               <Link href="/">
                 <a href="/" className="-m-1.5 p-1.5 flex items-center">
-                    <Image src={logo} alt="FreePub Logo" height="30" width="30" />
-                    <span className='pl-2'><b>FreePub</b></span>
+                  <Image src={logo} alt="FreePub Logo" height="30" width="30" />
+                  <span className="pl-2">
+                    <b>FreePub</b>
+                  </span>
                 </a>
-                </Link>
+              </Link>
               <button
                 type="button"
                 className="-m-2.5 rounded-md p-2.5 text-gray-700"
@@ -106,7 +110,7 @@ const Navbar = () => {
         </Dialog>
       </div>
     </div>
-    )
-}
+  );
+};
 
 export default Navbar;

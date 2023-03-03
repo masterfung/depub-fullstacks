@@ -14,10 +14,9 @@ const Footer = () => {
           <div className="w-full sm:w-auto text-center sm:text-left">
             <ul className="flex justify-center sm:justify-start space-x-6">
               <li>
-                <a href="#">Donate</a>
-              </li>
-              <li>
-                <a href="#">Create</a>
+                <Link href="/learn">
+                    <a href="/learn">Learn</a>
+                </Link>
               </li>
               <li>
                 <Link href="/about"><a href="/about">About</a></Link>

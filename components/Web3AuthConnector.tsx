@@ -7,15 +7,26 @@ import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 import { TorusWalletConnectorPlugin } from "@web3auth/torus-wallet-connector-plugin";
 // Adapters
 import { WalletConnectV1Adapter } from "@web3auth/wallet-connect-v1-adapter";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment, useReducer } from "react";
 
 import RPC from "../pages/api/ethersRPC"; // for using web3.js
+import Modal from "react-modal";
+import { Dialog, Transition } from "@headlessui/react";
+import { useRouter } from "next/router";
 
-const clientId = "BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk"; // get from https://dashboard.web3auth.io
+const clientId =
+  "BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk"; // get from https://dashboard.web3auth.io
 
 function Web3AuthConnector() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
-  const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
+  const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
+    null
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   useEffect(() => {
     const init = async () => {
@@ -114,6 +125,7 @@ function Web3AuthConnector() {
       uiConsole("web3auth not initialized yet");
       return;
     }
+    closeModal();
     const web3authProvider = await web3auth.connect();
     setProvider(web3authProvider);
     uiConsole("Logged in Successfully!");
@@ -269,13 +281,77 @@ function Web3AuthConnector() {
 
   const unloggedInView = (
     <button onClick={login} className="card">
-      Login
+      Connect Wallet
     </button>
   );
 
+  const create = (e) => {
+    e.preventDefault();
+    
+    router.push('/create');
+  }
+
   return (
-    <span className="grid">{provider ? loggedInView : unloggedInView}</span>
+    <>
+      <button
+        type="button"
+        onClick={openModal}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 px-4 rounded"
+      >
+        Login
+      </button>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Login to FreePub
+                  </Dialog.Title>
+                  <div className="mt-2">
+                    {provider ? loggedInView : unloggedInView}
+                  </div>
+                  <hr className="m-3" />
+                  <div className="mt-2">
+                    <button onClick={create} className="card">
+                      Submit Anonymously
+                    </button>
+                    <small>Content submitted anonymously will post to IPFS and will require community funding to be registered on-chain.</small>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
   );
 }
 
 export default Web3AuthConnector;
+
+// <span className="grid">{provider ? loggedInView : unloggedInView}</span>

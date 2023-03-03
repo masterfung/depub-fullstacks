@@ -28,6 +28,7 @@
     "react": "18",
     "react-dom": "18",
     "react-hook-form": "^7.43.3",
+    "react-modal": "^3.16.1",
     "tinygradient": "^1.1.5",
     "web3": "^1.8.2"
   },
@@ -37,6 +38,7 @@
     "@types/node": "18",
     "@types/react": "18",
     "@types/react-dom": "18",
+    "@types/react-modal": "^3.13.1",
     "autoprefixer": "^10.4.13",
     "eslint": "8.25.0",
     "eslint-config-next": "12.3.1",

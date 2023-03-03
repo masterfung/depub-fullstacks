@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-const SearchBar = ({updateFunction, endpoint}: {updateFunction: Function, endpoint: string}) => {
+const SearchBar = ({
+  updateFunction,
+  endpoint,
+}: {
+  updateFunction: Function;
+  endpoint: string;
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e: React.MouseEvent<HTMLButtonElement>) => {

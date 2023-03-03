@@ -10,7 +10,7 @@ type Props = {
 const Layout = ({ children }: Props) => {
   return (
     <div className="isolate bg-white">
-    <Head>
+      <Head>
         <title>FreePub</title>
       </Head>
         <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
