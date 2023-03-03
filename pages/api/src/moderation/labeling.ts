@@ -1,7 +1,9 @@
-import * as dotenv from 'dotenv';
-import axios from 'axios';
-import FormData from 'form-data'
-import { Stream } from 'stream';
+/*eslint-disable*/
+
+import * as dotenv from "dotenv";
+import axios from "axios";
+import FormData from "form-data"
+import { Stream } from "stream";
 
 dotenv.config();
 
@@ -10,12 +12,12 @@ export default class ImageLabeler {
     getLabelsUrl = async (url: string) => {
         try {
 
-            let result = await axios.get(process.env.SIGHTENGINE_ENDPOINT, {
+            const result = await axios.get(process.env.SIGHTENGINE_ENDPOINT ?? "", {
                 params: {
-                    'url': url,
-                    'models': 'nudity-2.0,offensive,scam,text-content,gore,text,qr-content',
-                    'api_user': process.env.SIGHTENGINE_USER,
-                    'api_secret': process.env.SIGHTENGINE_SECRET,
+                    "url": url,
+                    "models": "nudity-2.0,offensive,scam,text-content,gore,text,qr-content",
+                    "api_user": process.env.SIGHTENGINE_USER ?? "",
+                    "api_secret": process.env.SIGHTENGINE_SECRET ?? "",
                 }
             });
 
@@ -34,15 +36,15 @@ export default class ImageLabeler {
     getLabelsFile = async (stream: Stream) => {
         try {
 
-            let data = new FormData();
-            data.append('media', stream);
-            data.append('models', 'nudity-2.0,offensive,scam,text-content,gore,text,qr-content');
-            data.append('api_user', process.env.SIGHTENGINE_USER);
-            data.append('api_secret', process.env.SIGHTENGINE_SECRET);
+            const data = new FormData();
+            data.append("media", stream);
+            data.append("models", "nudity-2.0,offensive,scam,text-content,gore,text,qr-content");
+            data.append("api_user", process.env.SIGHTENGINE_USER ?? "");
+            data.append("api_secret", process.env.SIGHTENGINE_SECRET ?? "");
 
-            let result = await axios({
-                method: 'post',
-                url: process.env.SIGHTENGINE_ENDPOINT,
+            const result = await axios({
+                method: "post",
+                url: process.env.SIGHTENGINE_ENDPOINT ?? "",
                 data: data,
                 headers: data.getHeaders()
             });
@@ -67,32 +69,32 @@ export default class ImageLabeler {
             return [];
         }
 
-        let labels = [];
+        const labels = [];
 
-        if (data.status === 'success') {
+        if (data.status === "success") {
 
-            for (let key in data.nudity) {
-                if (key == 'none')
+            for (const key in data.nudity) {
+                if (key == "none")
                     continue;
                 if (data.nudity[key] >= 0.5)
                     labels.push(key);
             }
 
             if (data.text.profanity.length > 0)
-                labels.push('textcontent-profanity')
+                labels.push("textcontent-profanity")
 
             if (data.text.link.length > 0)
-                labels.push('textcontent-link')
+                labels.push("textcontent-link")
 
             if (data.qr.profanity.length > 0)
-                labels.push('qrcode-profanity')
+                labels.push("qrcode-profanity")
 
             if (data.qr.link.length > 0)
-                labels.push('qrcode-link')
+                labels.push("qrcode-link")
 
-            labels.push(...singleProb('offensive'));
-            labels.push(...singleProb('scam'));
-            labels.push(...singleProb('gore'))
+            labels.push(...singleProb("offensive"));
+            labels.push(...singleProb("scam"));
+            labels.push(...singleProb("gore"))
         }
 
         return labels;
