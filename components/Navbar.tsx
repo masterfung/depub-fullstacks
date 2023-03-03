@@ -6,7 +6,6 @@ import Image from "next/image";
 import Web3AuthConnector from "./Web3AuthConnector";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import LoginModal from "./LoginModal";
 
 const navigation = [
   { id: 1, name: "Published", href: "/" },

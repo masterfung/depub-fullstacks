@@ -336,7 +336,7 @@ function Web3AuthConnector() {
                   </div>
                   <hr className="m-3" />
                   <div className="mt-2">
-                    <button onClick={create} className="card">
+                    <button onClick={(e) => create} className="card">
                       Submit Anonymously
                     </button>
                     <small>Content submitted anonymously will post to IPFS and will require community funding to be registered on-chain.</small>
