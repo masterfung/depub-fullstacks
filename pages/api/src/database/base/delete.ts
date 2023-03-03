@@ -1,5 +1,5 @@
-import DatabaseBaseClient from './base.js';
-import { DocFieldValue } from './types.js';
+import DatabaseBaseClient from "./base";
+import { DocFieldValue } from "./types";
 
 export default class DatabaseDeleteClient extends DatabaseBaseClient {
   deleteSingleDocument = async (filter: DocFieldValue) => {

@@ -1,8 +1,8 @@
-import DatabaseBaseClient from './base.js';
-import { DocFieldValue } from './types.js';
+import DatabaseBaseClient from "./base";
+import { DocFieldValue } from "./types";
 
 // See: https://www.mongodb.com/docs/manual/reference/operator/update/#std-label-update-operators
-type UpdateType = 'set' | 'min' | 'max';
+type UpdateType = "set" | "min" | "max";
 
 interface DocumentUpdate {
   type: UpdateType;

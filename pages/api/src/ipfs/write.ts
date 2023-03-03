@@ -1,4 +1,4 @@
-import ipfs from './client.js';
+import ipfs from "./client";
 
 type FileContent =
   | AsyncIterable<Uint8Array>
@@ -12,9 +12,9 @@ export interface FileParams {
 }
 
 export default class IPFSWriteClient {
-  writeFile = async (data: FileContent) => ipfs.add(data);
+  writeFile = (data: FileContent) => ipfs.add(data);
 
-  writeDirectory = async (files: AsyncIterable<FileParams>) => {
+  writeDirectory = (files: AsyncIterable<FileParams>) => {
     const options = {
       wrapWithDirectory: true,
     };

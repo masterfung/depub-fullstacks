@@ -1,7 +1,7 @@
-import InsertClient from './insert.js';
-import QueryClient from './query.js';
-import UpdateClient from './update.js';
-import DeleteClient from './delete.js';
+import InsertClient from "./insert";
+import QueryClient from "./query";
+import UpdateClient from "./update";
+import DeleteClient from "./delete";
 
 export default class DatabaseClient {
   protected insert: InsertClient;

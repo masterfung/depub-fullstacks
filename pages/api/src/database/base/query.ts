@@ -1,5 +1,5 @@
-import DatabaseBaseClient from './base.js';
-import { DocFieldValue } from './types.js';
+import DatabaseBaseClient from "./base";
+import { DocFieldValue } from "./types";
 
 interface QueryWeight {
   path: string;
@@ -47,7 +47,7 @@ export default class DatabaseQueryClient extends DatabaseBaseClient {
       text: {
         query,
         path: {
-          wildcard: '*',
+          wildcard: "*",
         },
         fuzzy: {},
       },
@@ -70,7 +70,7 @@ export default class DatabaseQueryClient extends DatabaseBaseClient {
       $search: {
         index,
         compound: {
-          should: [defaultQuery, ...weightedQueries],
+          should: [defaultQuery, ...(weightedQueries ?? [])],
         },
       },
     };

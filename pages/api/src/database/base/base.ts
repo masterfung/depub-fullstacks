@@ -1,5 +1,5 @@
-import { MongoClient, Collection } from 'mongodb';
-import client from './client.js';
+import { MongoClient, Collection } from "mongodb";
+import client from "./client";
 
 export default class DatabaseBaseClient {
   protected client: MongoClient;

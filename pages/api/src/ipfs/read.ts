@@ -1,9 +1,9 @@
-import ipfs from './client.js';
-import extractFileContents from './extract.js';
+import ipfs from "./client";
+import extractFileContents from "./extract";
 
 export default class IPFSReadClient {
-  readContent = async (cid: string) => {
-    const byteStream = await ipfs.get(cid);
+  readContent = (cid: string) => {
+    const byteStream = ipfs.get(cid);
     return extractFileContents(byteStream);
   };
 }

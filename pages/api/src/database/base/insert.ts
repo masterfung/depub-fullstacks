@@ -1,4 +1,4 @@
-import DatabaseBaseClient from './base.js';
+import DatabaseBaseClient from "./base";
 
 export default class DatabaseInsertClient extends DatabaseBaseClient {
   insertSingleDocument = async (document: object) => {

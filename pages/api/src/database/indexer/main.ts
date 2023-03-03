@@ -1,5 +1,5 @@
-import DatabaseClient from '../base/main.js';
-import QueryWeights from './constants.js';
+import DatabaseClient from "../base/main";
+import QueryWeights from "./constants";
 
 interface IndexParams {
   title: string;
@@ -23,7 +23,7 @@ export default class DatabaseIndexerClient extends DatabaseClient {
   };
 
   queryContentIndex = async (query: string) => {
-    const index = process.env.MONGODB_INDEX_SEARCH;
+    const index = process.env.MONGODB_INDEX_SEARCH ?? "";
     const weights = [QueryWeights.title, QueryWeights.cid];
 
     return this.query.queryAgainstIndex(index, query, weights);
