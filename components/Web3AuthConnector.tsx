@@ -284,7 +284,7 @@ function Web3AuthConnector() {
     </button>
   );
 
-  const create = (e) => {
+  const create = (e: Event) => {
     e.preventDefault();
     
     router.push('/create');
