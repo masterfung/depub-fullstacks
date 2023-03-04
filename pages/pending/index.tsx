@@ -1,11 +1,21 @@
+import { useContext } from "react";
 import Layout from "../../components/Layout";
+import { Web3AuthContext, Web3AuthContextProvider } from "../../providers/Web3AuthContextProvider";
 
 const Pending = () => {
+  const { account } = useContext(Web3AuthContext);
+  console.log('account from pending', account);
   return (
-    <Layout>
-      <div>Pending</div>
-    </Layout>
+    <div>Pending {account}</div>
   );
 };
 
-export default Pending;
+const PendingPage = () => (
+  <Web3AuthContextProvider>
+    <Layout>
+      <Pending />
+    </Layout>
+  </Web3AuthContextProvider>
+);
+
+export default PendingPage;

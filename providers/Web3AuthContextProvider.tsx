@@ -172,7 +172,6 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
     setAccount(undefined);
     setProvider(null);
   };
-  
 
   const getChainId = async () => {
     if (!provider) {
@@ -206,9 +205,8 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
 
   useEffect(() => {
     void (async () => {
-        const addr = await getAccounts();
-        console.log('&&&& from prov', addr);
-        setAccount(addr);
+      const addr = await getAccounts();
+      setAccount(addr);
     })();
   }, [getAccounts]);
 
@@ -217,7 +215,7 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
       value={{
         web3auth,
         provider,
-        account,
+        account: account,
         isOpen,
         login,
         getUserInfo,

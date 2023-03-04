@@ -26,6 +26,10 @@ const WalletConnectivity = () => {
     void router.push("/create");
   };
 
+  const getMyWorks = () => {
+    void router.push("/myWorks");
+  }
+
   const loggedInView = (
     <>
       <div className="flex-container">
@@ -42,7 +46,7 @@ const WalletConnectivity = () => {
           Get Balance
         </button>
         <hr />
-        <button onClick={getBalance} className="card">
+        <button onClick={getMyWorks} className="card">
           My Contents
         </button>
         <hr />
@@ -119,7 +123,7 @@ const WalletConnectivity = () => {
                   <div className="mt-2">
                     {provider ? loggedInView : unloggedInView}
                   </div>
-                  {router.pathname == "/create" && !account && (
+                  {(router.pathname === "/create" || !account) && (
                     <>
                       <hr className="m-3" />
                       <div className="mt-2">

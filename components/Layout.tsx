@@ -41,11 +41,11 @@ const Layout = ({ children }: Props) => {
       </div>
 
       <Web3AuthContextProvider>
-        <Suspense fallback={"Loading..."}>
+        <>
           <Navbar />
           <main className="p-2">{children}</main>
           <Footer />
-        </Suspense>
+        </>
       </Web3AuthContextProvider>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { fileSize } from "../helper/utility";
 import { Web3AuthContext } from "../providers/Web3AuthContextProvider";
@@ -24,6 +24,7 @@ const Form = ({
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
   const { account } = useContext(Web3AuthContext);
+  const [successSubmission, setSuccessSubmission] = useState(false);
 
   const onSubmit = async (data: any) => {
     const formInput = data as FormType;
@@ -35,6 +36,7 @@ const Form = ({
     });
 
     console.log(directoryID);
+
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

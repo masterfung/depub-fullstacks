@@ -11,7 +11,7 @@ export default class Moderation {
     "given title, text",
     "and list of labels for supporting artifacts",
     "judge if the content is worth publishing",
-    "no spam, nudes, explicit content, hate speach or otherwise harmful content is allowed",
+    "no spam, nudes, explicit content, hate speech or otherwise harmful content is allowed",
     "unless it is evidence in direct support of wrong doing set forth in the text",
     "answer with a single confidence value ranging 0 to 1",
   ];
