@@ -17,9 +17,8 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
     res.end();
   }
 
-  /* const checker = new ContentCheck();
-  //returns if the check was successful and it's confidence in it being postable
-  const postable = await checker.isPostable(_req.body); */
+  const moderationStatus = await new ContentCheck().moderate(_req.body); 
+
 
   const timestamp = new Date().getTime() / 1000;
   try {
@@ -29,6 +28,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       description: description as string,
       author: author as string,
       fileNames: fileNames as string[],
+      moderationStatus: moderationStatus,
       timestamp,
     });
   } catch {
