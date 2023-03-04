@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Form from "../../components/Form";
 import Layout from "../../components/Layout";
 import { useRouter } from "next/router";
@@ -10,7 +9,7 @@ export default function Edit() {
 
   return (
     <Layout>
-      <div className="mt-3 border p-5 bg-white w-3/6 mx-auto">
+      <div className="mt-3 border p-5 bg-white w-5/6 mx-auto">
         <Form isEdit={true} cid={cid as string} />
       </div>
     </Layout>

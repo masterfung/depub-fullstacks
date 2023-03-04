@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Cards from "../components/Cards";
-import { CardsType } from "../types/app";
 
 import Layout from "../components/Layout";
 

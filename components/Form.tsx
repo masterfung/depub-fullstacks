@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
-import { fileSize } from "../types/utility";
+import { fileSize } from "../helper/utility";
+import {
+  GetProviderFromLocalStorage,
+  WALLET_PROVIDER_KEY,
+} from "../helper/localstorage";
+import { Web3AuthContext } from "../providers/Web3AuthContextProvider";
 
 const Form = ({
   isEdit,
@@ -15,6 +20,17 @@ const Form = ({
     formState: { errors },
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
+  const { account, getAccounts, } = useContext(Web3AuthContext);
+
+  console.log('!!!! account', account)
+
+  useEffect(() => {
+    void (async () => {
+        const addr = await getAccounts();
+        console.log('&&&& FORM', addr);
+        // setAccount(addr);
+    })();
+  }, [getAccounts, account]);
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -72,8 +88,10 @@ const Form = ({
           </label>
           <input
             type="author"
+            disabled={true}
             {...register("author", { required: false })}
-            className="form-input w-full border-gray-400 border h-10 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
+            value={account || ""}
+            className="form-input w-full border-gray-400 border h-10 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 cursor-not-allowed"
           />
         </div>
         <div className="mb-4">

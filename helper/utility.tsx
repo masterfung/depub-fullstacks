@@ -13,3 +13,10 @@ export const fileSize = (size: number) => {
     return `${(size / GB).toFixed(2)} GB`;
   }
 };
+
+export function uiConsole(...args: any[]): void {
+  const el = document.querySelector("#console>p");
+  if (el) {
+    el.innerHTML = JSON.stringify(args || {}, null, 2);
+  }
+}

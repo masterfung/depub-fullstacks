@@ -1,7 +1,8 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, Suspense } from "react";
 import Head from "next/head";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { Web3AuthContextProvider } from "../providers/Web3AuthContextProvider";
 
 type Props = {
   children?: ReactNode;
@@ -39,9 +40,13 @@ const Layout = ({ children }: Props) => {
         </svg>
       </div>
 
-      <Navbar />
-      <main className="p-2">{children}</main>
-      <Footer />
+      <Web3AuthContextProvider>
+        <Suspense fallback={"Loading..."}>
+          <Navbar />
+          <main className="p-2">{children}</main>
+          <Footer />
+        </Suspense>
+      </Web3AuthContextProvider>
     </div>
   );
 };
