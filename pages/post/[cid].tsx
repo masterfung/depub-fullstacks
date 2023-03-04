@@ -85,14 +85,16 @@ const Post = () => {
           <ul className="list-disc list-inside">
             {post?.files?.map((file, index) => (
               <li key={index}>
-                <span
-                  className="font-semibold"
+                <button
+                  style={{
+                    textDecoration: "underline",
+                  }}
                   onClick={async () => {
                     await download(post.id, file.name);
                   }}
                 >
                   {file.name === "" ? `${post.id} (Directory)` : file.name}
-                </span>
+                </button>
                 {file.size && (
                   <>
                     ({file.size}, {file.format})
