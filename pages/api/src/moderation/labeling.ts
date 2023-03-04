@@ -24,7 +24,7 @@ export default class ImageLabeler {
             console.log(result.data)
 
             if (result.status === 200)
-                return { sucess: true, labels: this.parseData(result.data) };
+                return { success: true, labels: this.parseData(result.data) };
 
         } catch (error) {
             console.log(error);
@@ -50,7 +50,7 @@ export default class ImageLabeler {
             });
 
             if (result.status === 200)
-                return { sucess: true, labels: this.parseData(result.data) }
+                return { success: true, labels: this.parseData(result.data) }
 
         } catch (error) {
             console.log(error);
