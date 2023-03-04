@@ -6,7 +6,7 @@ const SearchBar = ({
   updateFunction,
   endpoint,
 }: {
-  updateFunction: Function;
+  updateFunction: (searchTerm: string) => void;
   endpoint: string;
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +16,7 @@ const SearchBar = ({
     // Call API with searchTerm
     console.log("Searching for:", searchTerm);
     // use updateFunction here to update state.
+    updateFunction(searchTerm);
   };
 
   return (
