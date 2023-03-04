@@ -22,7 +22,11 @@ const publishContent = async (params: PublishParams) => {
     data,
   });
 
-  console.log(result);
+  if (result.status !== 200) {
+    return "";
+  }
+
+  return result.data as string;
 };
 
 export default publishContent;

@@ -6,9 +6,9 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from "../public/beer.png";
 import Image from "next/image";
-import Web3AuthConnector from "./Web3AuthConnector";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import WalletConnectivity from "./WalletConnectivity";
 
 const navigation = [
   { id: 1, name: "Published", href: "/" },
@@ -61,7 +61,7 @@ const Navbar = () => {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Web3AuthConnector />
+            <WalletConnectivity />
             {/* will need to update the above to show connected vs published content */}
           </div>
         </nav>
@@ -99,7 +99,7 @@ const Navbar = () => {
                   ))}
                 </div>
                 <div className="py-6">
-                  <Web3AuthConnector />
+                  <WalletConnectivity />
                 </div>
               </div>
             </div>

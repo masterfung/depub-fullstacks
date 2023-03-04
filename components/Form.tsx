@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useContext, Fragment } from "react";
 import { useForm } from "react-hook-form";
-import { fileSize } from "../types/utility";
+import { fileSize } from "../helper/utility";
+import { Web3AuthContext } from "../providers/Web3AuthContextProvider";
 import publish from "../rest/publish";
+import { Dialog, Transition } from "@headlessui/react";
+import router, { useRouter } from "next/router";
 
 interface FormType {
   title: string;
@@ -14,16 +17,32 @@ const Form = ({
   cid,
 }: {
   isEdit: boolean;
-  cid: string | undefined;
+  cid?: string | undefined;
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
+  const { account } = useContext(Web3AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const outer = useRouter();
+
+  function closeModal() {
+    setIsOpen(false);
+    if (account) {
+      void router.push("/");
+    } else {
+      void router.push("/pending");
+    }
+    reset();
+  }
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     const formInput = data as FormType;
     const directoryID = await publish({
       title: formInput.title,
@@ -33,6 +52,11 @@ const Form = ({
     });
 
     console.log(directoryID);
+
+    if (directoryID.length) {
+      setIsLoading(false);
+      setIsOpen(true);
+    }
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,8 +111,10 @@ const Form = ({
           </label>
           <input
             type="author"
+            disabled={true}
             {...register("author", { required: false })}
-            className="form-input w-full border-gray-400 border h-10 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300"
+            value={account || ""}
+            className="form-input w-full border-gray-400 border h-10 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 cursor-not-allowed"
           />
         </div>
         <div className="mb-4">
@@ -155,11 +181,67 @@ const Form = ({
         )}
         <button
           type="submit"
+          disabled={isLoading}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Submit
+          {isLoading ? "Processing..." : "Submit"}
         </button>
       </form>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Transaction Submission Success
+                  </Dialog.Title>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      {account
+                        ? "Your content has been submitted for moderation. Please wait a few moment to see your content on the Published tab."
+                        : "Anonymous content submission will undergo moderation and community funding to publish. Post moderation content will appear in Pending."}
+                    </p>
+                  </div>
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={closeModal}
+                    >
+                      Got it, thanks!
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 };

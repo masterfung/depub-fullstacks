@@ -1,22 +1,23 @@
 import { useContext } from "react";
-import Layout from "../../components/Layout";
 import {
   Web3AuthContext,
   Web3AuthContextProvider,
 } from "../../providers/Web3AuthContextProvider";
+import Layout from "../../components/Layout";
 
-const Pending = () => {
+const MyWorks = () => {
   const { account } = useContext(Web3AuthContext);
-  console.log("account from pending", account);
-  return <div>Pending {account}</div>;
+  console.log("account", account);
+
+  return <div>{account ? "Protected View" : "Need to login to see"}</div>;
 };
 
-const PendingPage = () => (
+const MyWorksPage = () => (
   <Web3AuthContextProvider>
     <Layout>
-      <Pending />
+      <MyWorks />
     </Layout>
   </Web3AuthContextProvider>
 );
 
-export default PendingPage;
+export default MyWorksPage;
