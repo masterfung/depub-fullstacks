@@ -11,13 +11,20 @@ interface Content {
 
 const maxArtifactLimit = 10;
 
+enum ModerationStatus {
+  NotStarted,
+  NeedsReview,
+  Passed,
+}
+
 export default class ContentCheck {
   private labeler = new ImageLabeler();
   private moderation = new Moderation();
   private ipfsAddress = "https://ipfs.io/ipfs/";
 
-  isPostable = async (content: Content) => {
+  moderate = async (content: Content) => {
     const labelSet = new Set<string>();
+    let status = ModerationStatus.NotStarted;
 
     const filteredFiles = content.fileNames.filter((file) => {
       const ext = file.split(".").pop() ?? "";
@@ -27,7 +34,7 @@ export default class ContentCheck {
     });
 
     //todo double check if the link in here makes sense
-    const results = await Promise.all(
+    const labelingRes = await Promise.all(
       filteredFiles
         .slice(0, maxArtifactLimit)
         .map((img) =>
@@ -37,11 +44,25 @@ export default class ContentCheck {
         )
     );
 
-    results.flatMap((res) => res.labels).forEach((lbl) => labelSet.add(lbl));
-    return await this.moderation.verify(
+    if (filteredFiles.length > 0 && labelingRes.every(res => !res.success))
+      return status;
+
+
+    labelingRes.flatMap((res) => res.labels).forEach((lbl) => labelSet.add(lbl));
+
+    const moderationRes = await this.moderation.verify(
       content.title,
       content.description,
       Array.from(labelSet)
     );
+
+    if (moderationRes.success) {
+      if(moderationRes.confidence >= 0.5)
+        status = ModerationStatus.Passed;
+      else
+        status = ModerationStatus.NeedsReview;
+    }
+
+    return status;
   };
 }
