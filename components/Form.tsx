@@ -23,7 +23,7 @@ const Form = ({
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
   const { account } = useContext(Web3AuthContext);

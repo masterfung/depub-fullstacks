@@ -44,11 +44,12 @@ export default class ContentCheck {
         )
     );
 
-    if (filteredFiles.length > 0 && labelingRes.every(res => !res.success))
+    if (filteredFiles.length > 0 && labelingRes.every((res) => !res.success))
       return status;
 
-
-    labelingRes.flatMap((res) => res.labels).forEach((lbl) => labelSet.add(lbl));
+    labelingRes
+      .flatMap((res) => res.labels)
+      .forEach((lbl) => labelSet.add(lbl));
 
     const moderationRes = await this.moderation.verify(
       content.title,
@@ -57,10 +58,8 @@ export default class ContentCheck {
     );
 
     if (moderationRes.success) {
-      if(moderationRes.confidence >= 0.5)
-        status = ModerationStatus.Passed;
-      else
-        status = ModerationStatus.NeedsReview;
+      if (moderationRes.confidence >= 0.5) status = ModerationStatus.Passed;
+      else status = ModerationStatus.NeedsReview;
     }
 
     return status;
