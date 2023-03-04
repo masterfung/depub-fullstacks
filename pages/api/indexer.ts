@@ -17,8 +17,8 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
     res.end();
   }
 
-  const moderationStatus = await new ContentCheck().moderate(_req.body); 
-
+  // eslint-disable-next-line
+  const moderationStatus = await new ContentCheck().moderate(_req.body);
 
   const timestamp = new Date().getTime() / 1000;
   try {
