@@ -30,7 +30,7 @@ interface ContentPost {
 const displayBytes = (bytes: number) => {
   const truncated = (b: number) => Math.trunc(b * 100) / 100;
   if (bytes < 1e3) {
-    return `${truncated(bytes)} bytes`;
+    return `${truncated(bytes)}B`;
   }
   if (bytes < 1e6) {
     return `${truncated(bytes / 1e3)}KB`;
