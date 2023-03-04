@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import Cards from "../components/Cards";
 
 import Layout from "../components/Layout";
@@ -6,10 +6,12 @@ import Layout from "../components/Layout";
 import SearchBar from "../components/SearchBar";
 import { CardsType } from "../types/app";
 import query from "../rest/query";
+import { useRouter } from "next/router";
 
 function App() {
   const [cards, setCards] = useState<CardsType>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const router = useRouter();
 
   useEffect(() => {
     query(searchTerm)
@@ -32,7 +34,7 @@ function App() {
         setCards([]);
         console.log(e);
       });
-  }, [searchTerm]);
+  }, [searchTerm, router.pathname]);
 
   return (
     <Layout>
