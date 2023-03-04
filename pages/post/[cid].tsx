@@ -41,16 +41,21 @@ const Post = () => {
         }
         const postData = res[0] as NetworkPost;
         console.log(postData);
+        const dirFile = {
+          name: "",
+        };
         setPost({
           id: cid,
           title: postData.title,
           description: postData.description,
           author: postData.author ?? "Anonymous",
-          files: postData.fileNames.map((fileName) => {
-            return {
-              name: fileName,
-            };
-          }),
+          files: [dirFile].concat(
+            postData.fileNames.map((fileName) => {
+              return {
+                name: fileName,
+              };
+            })
+          ),
         });
       })
       .catch((e) => {

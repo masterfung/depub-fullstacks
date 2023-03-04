@@ -12,8 +12,9 @@ const publishContent = async (params: PublishParams) => {
   const { title, description, author, files } = params;
 
   const data = new FormData();
-  data.append("metadata", `${title}${description}`);
-  data.append("file", files[0]);
+  files.forEach((file) => {
+    data.append(`${file.name}${file.size}`, file);
+  });
 
   const url = "api/publish";
 
