@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import DatabaseInsertClient from "./src/database/base/insert";
+import ContentCheck from "./src/moderation/contentcheck";
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   const { title, description, author, directoryCID, fileNames } = _req.body;
@@ -15,6 +16,10 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
     res.status(400);
     res.end();
   }
+
+  /* const checker = new ContentCheck();
+  //returns if the check was successful and it's confidence in it being postable
+  const postable = await checker.isPostable(_req.body); */
 
   const timestamp = new Date().getTime() / 1000;
   try {
