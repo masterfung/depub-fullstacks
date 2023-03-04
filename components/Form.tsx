@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileSize } from "../types/utility";
+import publish from "../rest/publish";
+
+interface FormType {
+  title: string;
+  description: string;
+  author: string;
+}
 
 const Form = ({
   isEdit,
@@ -16,8 +23,16 @@ const Form = ({
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    const formInput = data as FormType;
+    const directoryID = await publish({
+      title: formInput.title,
+      description: formInput.description,
+      author: formInput.author,
+      files,
+    });
+
+    console.log(directoryID);
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
