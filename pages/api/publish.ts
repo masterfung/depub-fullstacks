@@ -1,6 +1,5 @@
-/* eslint-disable */
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Writable, Transform, Readable } from "stream";
+import { Writable, Readable } from "stream";
 import { formidable } from "formidable";
 import IPFSWriteClient, { FileParams } from "./src/ipfs/write";
 
@@ -10,18 +9,18 @@ export const config = {
   },
 };
 
-async function* streamedDirectory(readable: Readable): AsyncIterable<FileParams> {
+async function* streamedDirectory(
+  readable: Readable
+): AsyncIterable<FileParams> {
   for await (const entry of readable) {
-    console.log('Dir entry: ')
-    console.log(entry)
+    console.log("Yielding dir entry:");
+    console.log(entry);
     yield entry as FileParams;
   }
 }
 
 async function* streamedFile(readable: Readable): AsyncIterable<Uint8Array> {
   for await (const entry of readable) {
-    console.log('File entry: ')
-    console.log(entry)
     yield entry;
   }
 }
@@ -35,8 +34,9 @@ const handler = (_req: NextApiRequest, res: NextApiResponse) => {
     // Do nothing
   };
 
-  const directoryFiles: FileParams[] = [];
-
+  // eslint-disable-next-line
+  // @ts-ignore
+  // eslint-disable-next-line
   const form = new formidable.IncomingForm({
     fileWriteStreamHandler: (file: any) => {
       const writable = new Writable();
@@ -53,39 +53,32 @@ const handler = (_req: NextApiRequest, res: NextApiResponse) => {
       };
 
       dirReadable.push({
+        // eslint-disable-next-line
         path: file.originalFilename,
         content: streamedFile(readable),
-      })
+      });
 
-      writable.on('close', () => {
+      writable.on("close", () => {
         readable.push(null);
-      })
-
-      // directoryFiles.push({
-      //   path: file.originalFilename,
-      //   content: readable,
-      // });
+      });
 
       return writable;
     },
   });
 
+  // eslint-disable-next-line
   form.keepExtensions = true;
+  // eslint-disable-next-line
   form.parse(_req, async (err: any, fields: any, files: any) => {
     console.log("Writing file to IPFS");
-    console.log(fields);
-    console.log(files);
-    console.log(directoryFiles);
     dirReadable.push(null);
     const result = client.writeDirectory(streamedDirectory(dirReadable));
 
-    console.log('Starting to log results:')
-
+    res.write("[");
     for await (const el of result) {
-      console.log('Parsing result');
-      console.log(el);
       res.write(JSON.stringify(el));
     }
+    res.write("]");
 
     res.status(200);
     res.end();

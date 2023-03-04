@@ -20,7 +20,6 @@ export default class IPFSWriteClient {
       wrapWithDirectory: true,
     };
 
-    console.log("Writing to IPFS from client");
     return ipfs.addAll(files, options);
   };
 }
