@@ -1,11 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { fileSize } from "../helper/utility";
-import {
-  GetProviderFromLocalStorage,
-  WALLET_PROVIDER_KEY,
-} from "../helper/localstorage";
 import { Web3AuthContext } from "../providers/Web3AuthContextProvider";
+import publish from "../rest/publish";
+
+interface FormType {
+  title: string;
+  description: string;
+  author: string;
+}
 
 const Form = ({
   isEdit,
@@ -20,20 +23,18 @@ const Form = ({
     formState: { errors },
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
-  const { account, getAccounts, } = useContext(Web3AuthContext);
+  const { account } = useContext(Web3AuthContext);
 
-  console.log('!!!! account', account)
+  const onSubmit = async (data: any) => {
+    const formInput = data as FormType;
+    const directoryID = await publish({
+      title: formInput.title,
+      description: formInput.description,
+      author: formInput.author,
+      files,
+    });
 
-  useEffect(() => {
-    void (async () => {
-        const addr = await getAccounts();
-        console.log('&&&& FORM', addr);
-        // setAccount(addr);
-    })();
-  }, [getAccounts, account]);
-
-  const onSubmit = (data: any) => {
-    console.log(data);
+    console.log(directoryID);
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

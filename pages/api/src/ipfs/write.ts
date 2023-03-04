@@ -2,6 +2,7 @@ import ipfs from "./client";
 
 type FileContent =
   | AsyncIterable<Uint8Array>
+  | ReadableStream<Uint8Array>
   | Iterable<Uint8Array>
   | string
   | Uint8Array;
