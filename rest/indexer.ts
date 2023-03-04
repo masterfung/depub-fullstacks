@@ -1,13 +1,18 @@
+interface File {
+  name: string;
+  size: number;
+}
+
 interface IndexParams {
   title: string;
   description: string;
   author: string;
   directoryCID: string;
-  fileNames: string[];
+  files: File[];
 }
 
 const indexContent = async (params: IndexParams) => {
-  const { title, description, author, directoryCID, fileNames } = params;
+  const { title, description, author, directoryCID, files } = params;
 
   const url = "api/indexer";
 
@@ -19,7 +24,7 @@ const indexContent = async (params: IndexParams) => {
       description,
       author,
       directoryCID,
-      fileNames,
+      files,
     }),
   });
 

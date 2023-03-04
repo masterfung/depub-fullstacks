@@ -28,14 +28,17 @@ const publishContent = async (params: PublishParams) => {
     return "";
   }
 
-  const fileNames = files.map((f) => f.name);
+  const filesMetadata = files.map((f) => ({
+    name: f.name,
+    size: f.size,
+  }));
   const directoryCID = result.data as string;
 
   return await indexContent({
     title,
     description,
     author,
-    fileNames,
+    files: filesMetadata,
     directoryCID,
   });
 };

@@ -7,8 +7,7 @@ import download from "../../rest/download";
 
 interface File {
   name: string;
-  size?: string;
-  format?: string;
+  size?: number;
   versions?: any[];
   publishedDate?: any;
 }
@@ -16,7 +15,7 @@ interface NetworkPost {
   title: string;
   description: string;
   author: string;
-  fileNames: string[];
+  files: File[];
 }
 
 interface ContentPost {
@@ -27,6 +26,20 @@ interface ContentPost {
   files: File[];
   tags?: any[];
 }
+
+const displayBytes = (bytes: number) => {
+  const truncated = (b: number) => Math.trunc(b * 100) / 100;
+  if (bytes < 1e3) {
+    return `${truncated(bytes)} bytes`;
+  }
+  if (bytes < 1e6) {
+    return `${truncated(bytes / 1e3)}KB`;
+  }
+  if (bytes < 1e9) {
+    return `${truncated(bytes / 1e6)}MB`;
+  }
+  return `${truncated(bytes / 1e9)}GB`;
+};
 
 const Post = () => {
   const router = useRouter();
@@ -50,9 +63,10 @@ const Post = () => {
           description: postData.description,
           author: postData.author ?? "Anonymous",
           files: [dirFile].concat(
-            postData.fileNames.map((fileName) => {
+            postData.files.map((file) => {
               return {
-                name: fileName,
+                name: file.name,
+                size: file.size,
               };
             })
           ),
@@ -100,11 +114,7 @@ const Post = () => {
                 >
                   {file.name === "" ? `${post.id} (Directory)` : file.name}
                 </button>
-                {file.size && (
-                  <>
-                    ({file.size}, {file.format})
-                  </>
-                )}
+                {file.size && ` (${displayBytes(file.size)})`}
                 {file.versions && (
                   <div className="ml-4">
                     <span className="font-bold">Versions:</span>{" "}
