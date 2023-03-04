@@ -22,7 +22,6 @@ const WalletConnectivity = () => {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
-
   const create = () => {
     void router.push("/create");
   };
@@ -61,7 +60,7 @@ const WalletConnectivity = () => {
     <button onClick={login} className="card">
       Connect Wallet
     </button>
-  );  
+  );
 
   return (
     <>
@@ -148,4 +147,3 @@ const WalletConnectivity = () => {
 };
 
 export default WalletConnectivity;
-
