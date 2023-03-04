@@ -29,6 +29,9 @@ const publishContent = async (params: PublishParams) => {
     uploadedFileNames.push(res.path);
   }
 
+  console.log("Directory CID:");
+  console.log(directoryCID);
+
   if (directoryCID === "") {
     return "";
   }

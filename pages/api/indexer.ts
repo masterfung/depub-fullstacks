@@ -31,7 +31,9 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       fileNames: fileNames as string[],
       timestamp,
     });
-  } catch {
+  } catch (e) {
+    console.log("Error with indxing:");
+    console.log(e);
     res.status(400);
     res.end();
   }
