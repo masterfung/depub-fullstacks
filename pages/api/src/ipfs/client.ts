@@ -13,13 +13,14 @@ const secret = process.env.NEXT_PUBLIC_INFURA_API_SECRET ?? "";
 const auth = `Basic ${Buffer.from(`${id}:${secret}`).toString("base64")}`;
 console.log(auth);
 
-const client = ipfs.create({
-  host,
-  port,
-  protocol,
-  headers: {
-    authorization: auth,
-  },
-});
+// const client = ipfs.create({
+//   host,
+//   port,
+//   protocol,
+//   headers: {
+//     authorization: auth,
+//   },
+// });
+const client = ipfs.create({ url: "/ip4/127.0.0.1/tcp/5001" });
 
 export default client;

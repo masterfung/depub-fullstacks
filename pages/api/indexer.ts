@@ -3,7 +3,7 @@ import DatabaseInsertClient from "./src/database/base/insert";
 import ContentCheck from "./src/moderation/contentcheck";
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
-  const { title, description, author, directoryCID, fileNames } = _req.body;
+  const { title, description, author, directoryCID, files } = _req.body;
 
   const indexCollection = process.env.MONGODB_INDEX_COLLECTION ?? "";
   const insertClient = new DatabaseInsertClient(indexCollection);
@@ -27,7 +27,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       title: title as string,
       description: description as string,
       author: author as string,
-      fileNames: fileNames as string[],
+      files: files as object[],
       moderationStatus: moderationStatus,
       timestamp,
     });
