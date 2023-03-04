@@ -1,6 +1,7 @@
 import axios from "axios";
+import indexContent from "./indexer";
 
-interface PublishParams {
+export interface PublishParams {
   title: string;
   description: string;
   author: string;
@@ -26,7 +27,16 @@ const publishContent = async (params: PublishParams) => {
     return "";
   }
 
-  return result.data as string;
+  const fileNames = files.map((f) => f.name);
+  const directoryCID = result.data as string;
+
+  return await indexContent({
+    title,
+    description,
+    author,
+    fileNames,
+    directoryCID,
+  });
 };
 
 export default publishContent;

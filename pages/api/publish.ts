@@ -74,11 +74,11 @@ const handler = (_req: NextApiRequest, res: NextApiResponse) => {
     dirReadable.push(null);
     const result = client.writeDirectory(streamedDirectory(dirReadable));
 
-    res.write("[");
     for await (const el of result) {
-      res.write(JSON.stringify(el));
+      if (el.path === "") {
+        res.write(el.cid.toString());
+      }
     }
-    res.write("]");
 
     res.status(200);
     res.end();
