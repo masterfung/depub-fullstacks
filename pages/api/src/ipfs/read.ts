@@ -6,4 +6,12 @@ export default class IPFSReadClient {
     const byteStream = ipfs.get(cid);
     return extractFileContents(byteStream);
   };
+
+  readDirectory = (directoryCID: string) => {
+    return ipfs.get(directoryCID, {
+      archive: true,
+      compress: true,
+      compressionLevel: 5,
+    });
+  };
 }
