@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import DatabaseInsertClient from "./src/database/base/insert";
-import ContentCheck from "./src/moderation/contentcheck";
+import CronScheduler from "./src/cronjobs/CronScheduler";
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   const { title, description, author, directoryCID, files } = _req.body;
@@ -18,7 +18,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // eslint-disable-next-line
-  const moderationStatus = await new ContentCheck().moderate(_req.body);
+  await CronScheduler.scheduleModeration(_req.body);
 
   const timestamp = new Date().getTime() / 1000;
   try {
@@ -28,7 +28,6 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       description: description as string,
       author: author as string,
       files: files as object[],
-      moderationStatus: moderationStatus,
       timestamp,
     });
   } catch (e) {

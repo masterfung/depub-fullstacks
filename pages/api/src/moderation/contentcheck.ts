@@ -1,7 +1,7 @@
 import ImageLabeler from "./labeling";
 import Moderation from "./moderation";
 
-interface Content {
+export interface Content {
   title: string;
   description: string;
   author: string;
@@ -14,13 +14,13 @@ interface Content {
 
 const maxArtifactLimit = 10;
 
-enum ModerationStatus {
+export enum ModerationStatus {
   NotStarted,
   NeedsReview,
   Passed,
 }
 
-export default class ContentCheck {
+export class ContentCheck {
   private labeler = new ImageLabeler();
   private moderation = new Moderation();
   private ipfsAddress = "https://ipfs.io/ipfs/";
@@ -33,12 +33,11 @@ export default class ContentCheck {
       .map((f) => f.name)
       .filter((fileName) => {
         const ext = fileName.split(".").pop() ?? "";
-        return !["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(
+        return ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(
           ext.toLowerCase()
         );
       });
 
-    //todo double check if the link in here makes sense
     const labelingRes = await Promise.all(
       filteredFileNames
         .slice(0, maxArtifactLimit)
@@ -73,3 +72,4 @@ export default class ContentCheck {
     return status;
   };
 }
+
