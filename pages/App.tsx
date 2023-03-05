@@ -14,6 +14,7 @@ enum STATUS {
   FUNDED = "FUNDED",
   BLACKLISTED = "BLACKLISTED",
 }
+
 function App() {
   const [cards, setCards] = useState<CardsType>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
