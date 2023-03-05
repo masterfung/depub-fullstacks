@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SafeEventEmitterProvider } from "@web3auth/base";
 import { ethers } from "ethers";
+import bs58 from "bs58";
+
+interface TipTxParams {
+  amountInEther: string;
+  cid: string;
+}
 
 export default class EthereumRpc {
   private provider: SafeEventEmitterProvider;
@@ -53,22 +59,32 @@ export default class EthereumRpc {
     }
   }
 
-  async sendTransaction(): Promise<any> {
+  async sendTipTransaction(params: TipTxParams) {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
       const signer = ethersProvider.getSigner();
 
-      const destination = "0x40e1c367Eca34250cAF1bc8330E9EddfD403fC56";
+      const destination =
+        process.env.NEXT_PUBLIC_CONTRACT_CONTENT_STORE_MUMBAI ?? "";
 
       // Convert 1 ether to wei
-      const amount = ethers.utils.parseEther("0.001");
+      const amount = ethers.utils.parseEther(params.amountInEther);
+
+      const abi = ["function tipContent(bytes32 cid) payable"];
+      const abiInterface = new ethers.utils.Interface(abi);
+
+      const cidBytes = bs58.decode(params.cid).slice(2);
+      const calldata = abiInterface.encodeFunctionData("tipContent", [
+        cidBytes,
+      ]);
 
       // Submit transaction to the blockchain
       const tx = await signer.sendTransaction({
         to: destination,
         value: amount,
-        maxPriorityFeePerGas: "5000000000", // Max priority fee per gas
-        maxFeePerGas: "6000000000000", // Max fee per gas
+        maxFeePerGas: "6000000000", // Max fee per gas
+        gasLimit: 8000000,
+        data: calldata,
       });
 
       // Wait for transaction to be mined
