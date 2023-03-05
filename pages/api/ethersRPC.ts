@@ -96,6 +96,54 @@ export default class EthereumRpc {
     }
   }
 
+  async getContentTips(cid: string) {
+    try {
+      const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+      const destination =
+        process.env.NEXT_PUBLIC_CONTRACT_CONTENT_STORE_MUMBAI ?? "";
+
+      const abi = [
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "cid",
+              type: "bytes32",
+            },
+          ],
+          name: "metadata",
+          outputs: [
+            {
+              name: "author",
+              type: "address",
+            },
+            {
+              name: "tips",
+              type: "uint256",
+            },
+            // ...
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ];
+
+      const cidBytes = bs58.decode(cid).slice(2);
+
+      const contract = new ethers.Contract(destination, abi, ethersProvider);
+      // eslint-disable-next-line
+      const result = await contract.metadata(cidBytes);
+      console.log("Total Tips:");
+      // eslint-disable-next-line
+      console.log(ethers.utils.formatEther(result.tips));
+      // eslint-disable-next-line
+      return ethers.utils.formatEther(result.tips);
+    } catch (e) {
+      console.log(e);
+      return "";
+    }
+  }
+
   async signMessage() {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
