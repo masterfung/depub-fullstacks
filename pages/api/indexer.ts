@@ -2,6 +2,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import DatabaseInsertClient from "./src/database/base/insert";
 import CronScheduler from "./src/cronjobs/CronScheduler";
 
+enum STATUS {
+  UNFUNDED = "UNFUNDED",
+  FUNDED = "FUNDED",
+  BLACKLISTED = "BLACKLISTED",
+}
+
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   const { title, description, author, directoryCID, files } = _req.body;
 
@@ -29,9 +35,10 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       author: author as string,
       files: files as object[],
       timestamp,
+      status: STATUS.UNFUNDED,
     });
   } catch (e) {
-    console.log("Error with indxing:");
+    console.log("Error with indexing:");
     console.log(e);
     res.status(400);
     res.end();

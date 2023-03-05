@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import DatabaseBaseClient from "./base";
 import { DocFieldValue } from "./types";
 
@@ -25,10 +26,21 @@ export default class DatabaseQueryClient extends DatabaseBaseClient {
   queryAgainstIndex = async (
     index: string,
     query: string,
+    filter?: DocFieldValue,
     weights?: QueryWeight[]
   ) => {
     const searchQuery = this.buildSearchQuery(index, query, weights);
+    if (filter) {
+      const filterQuery = this.buildSearchMatch(filter);
+      return this.collection.aggregate([searchQuery, filterQuery]).toArray();
+    }
     return this.collection.aggregate([searchQuery]).toArray();
+  };
+
+  private buildSearchMatch = (filter: DocFieldValue) => {
+    return {
+      $match: filter,
+    };
   };
 
   /**

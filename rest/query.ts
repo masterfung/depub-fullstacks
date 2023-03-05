@@ -1,5 +1,11 @@
-const query = async (searchText: string) => {
-  const url = `api/query?searchTerm=${searchText}`;
+enum STATUS {
+  UNFUNDED = "UNFUNDED",
+  FUNDED = "FUNDED",
+  BLACKLISTED = "BLACKLISTED",
+}
+
+const query = async (searchText: string, status: STATUS) => {
+  const url = `api/query?searchTerm=${searchText}&status=${status}`;
   console.log(`URL`);
   console.log(url);
 

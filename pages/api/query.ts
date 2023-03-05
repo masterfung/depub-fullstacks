@@ -4,6 +4,7 @@ import QueryClient from "./src/database/base/query";
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   console.log("Searching for query");
   const searchTerm = _req.query.searchTerm as string;
+  const status = _req.query.status as string;
   console.log("Search Term:");
   console.log(searchTerm);
 
@@ -13,9 +14,11 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
 
   let results;
   if (searchTerm === "") {
-    results = await client.queryAllDocuments();
+    results = await client.queryByEquality({
+      status: status,
+    });
   } else {
-    results = await client.queryAgainstIndex(index, searchTerm);
+    results = await client.queryAgainstIndex(index, searchTerm, {status});
   }
 
   console.log(results);
