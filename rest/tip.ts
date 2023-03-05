@@ -27,7 +27,10 @@ const sendTip = async (params: TipParams) => {
     return;
   }
 
-  await updateIndex(cid);
+  // eslint-disable-next-line
+  updateIndex(cid);
+  // eslint-disable-next-line
+  backupViaAxelar(cid, web3Provider);
 };
 
 const updateIndex = async (cid: string) => {
@@ -44,6 +47,22 @@ const updateIndex = async (cid: string) => {
   }
 
   return true;
+};
+
+const backupViaAxelar = async (
+  cid: string,
+  provider: SafeEventEmitterProvider
+) => {
+  const rpc = new RPC(provider);
+  const contractResult = await rpc.sendAxelarBackupContract(cid);
+  if (typeof contractResult === "string") {
+    return;
+  }
+  console.log(contractResult);
+  const gasResult = await rpc.sendAxelarBackupGas(
+    contractResult.transactionHash
+  );
+  console.log(gasResult);
 };
 
 export default sendTip;

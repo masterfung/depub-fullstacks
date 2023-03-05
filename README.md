@@ -4,6 +4,8 @@ We are building a decentralized successor to WikiLeaks to promote truth and tran
 
 Site of [FreePub](https://freepub.io)
 
+[FreePub Contracts](https://github.com/austinchandra/freepub-contracts)
+
 The contributors are:
 - Johnny Hung @masterfung
 - Austin Chandra @austinchandra

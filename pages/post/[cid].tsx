@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import sendTip from "../../rest/tip";
 
 import queryByCID from "../../rest/queryByCID";
+import queryTip from "../../rest/queryTip";
 import download from "../../rest/download";
 import {
   Web3AuthContextProvider,
@@ -51,13 +52,38 @@ const displayBytes = (bytes: number) => {
 const tipContent = async (
   cid: string,
   tip: string,
+  setReceivedTips: (tips: string) => void,
   provider: SafeEventEmitterProvider
 ) => {
   await sendTip({
     amountInEther: tip,
     cid,
     web3Provider: provider,
-  });
+  })
+    .then((res) => {
+      console.log(res);
+      queryReceivedTips(cid, setReceivedTips, provider);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+const queryReceivedTips = (
+  cid: string,
+  setReceivedTips: (tips: string) => void,
+  provider: SafeEventEmitterProvider
+) => {
+  console.log("Querying for Tip");
+  console.log(cid);
+  queryTip({
+    cid,
+    web3Provider: provider,
+  })
+    .then((res) => setReceivedTips(res))
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 const Post = () => {
@@ -65,6 +91,7 @@ const Post = () => {
   const [post, setPost] = useState<ContentPost | undefined>();
   const [tipSelectIsOpen, setTipSelectIsOpen] = useState(false);
   const [tip, setTip] = useState<string | undefined>();
+  const [receivedTips, setReceivedTips] = useState<string>("");
   const { account, provider } = useWeb3AuthContext();
 
   const closeModal = () => {
@@ -103,7 +130,10 @@ const Post = () => {
       .catch((e) => {
         console.log(e);
       });
-  }, [router.query, router.pathname]);
+    if (provider) {
+      queryReceivedTips(cid, setReceivedTips, provider);
+    }
+  }, [router.query, router.pathname, provider]);
 
   // we will need to query the endpoint to get the data back from the cid/pid and display the data here
 
@@ -154,6 +184,9 @@ const Post = () => {
               Tip
             </button>
           </div>
+          {receivedTips !== "" && (
+            <div className="mt-3">{`Tips: ${receivedTips} MATIC`}</div>
+          )}
         </div>
       </div>
       <p className="text-gray-600 mb-4">{post?.description}</p>
@@ -241,7 +274,7 @@ const Post = () => {
                         const { cid } = (router.query as { cid: string }) || {
                           cid: "1",
                         };
-                        tipContent(cid, tip, provider);
+                        tipContent(cid, tip, setReceivedTips, provider);
                         closeModal();
                       }}
                     >
