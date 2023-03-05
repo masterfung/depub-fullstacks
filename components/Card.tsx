@@ -24,15 +24,6 @@ const Card = ({ data }: { data: CardType }) => {
         className="flex flex-col md:flex-row bg-white rounded-lg p-6 shadow-lg hover:scale-105 transition duration-300 ease-in-out cursor-pointer"
         style={{ background: css }}
       >
-        <div className="w-full md:w-1/3 mb-6 md:mb-0">
-          <Image
-            src={logo}
-            alt="Card Image"
-            height="80"
-            width="80"
-            className="rounded-lg"
-          />
-        </div>
         <div className="w-full md:flex-1 md:pl-6">
           <h2 className="text-xl font-semibold mb-2">{data.title}</h2>
           <p className="text-gray-600 mb-4">{data.description}</p>

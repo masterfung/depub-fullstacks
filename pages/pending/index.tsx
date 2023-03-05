@@ -39,7 +39,7 @@ const Pending = () => {
             description: post.description,
             // eslint-disable-next-line
             author: post.author,
-            version: "0.0.0",
+            version: "1",
           }))
         );
         setIsLoading(false);
