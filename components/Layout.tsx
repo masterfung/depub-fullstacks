@@ -51,7 +51,7 @@ const Layout = ({ children }: Props) => {
             rel="noopener noreferrer"
             className="text-blue-500 hover:text-blue-100 ml-3 align-middle"
           >
-            platform
+            Guide
           </a>
         </div>
       </div>
