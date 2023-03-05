@@ -54,8 +54,15 @@ const backupViaAxelar = async (
   provider: SafeEventEmitterProvider
 ) => {
   const rpc = new RPC(provider);
-  const result = await rpc.sendAxelarBackup(cid);
-  console.log(result);
+  const contractResult = await rpc.sendAxelarBackupContract(cid);
+  if (typeof contractResult === "string") {
+    return;
+  }
+  console.log(contractResult);
+  const gasResult = await rpc.sendAxelarBackupGas(
+    contractResult.transactionHash
+  );
+  console.log(gasResult);
 };
 
 export default sendTip;

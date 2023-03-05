@@ -2,6 +2,12 @@
 import type { SafeEventEmitterProvider } from "@web3auth/base";
 import { ethers } from "ethers";
 import bs58 from "bs58";
+import {
+  AxelarGMPRecoveryAPI,
+  Environment,
+  AddGasOptions,
+  EvmChain,
+} from "@axelar-network/axelarjs-sdk";
 
 interface TipTxParams {
   amountInEther: string;
@@ -96,12 +102,13 @@ export default class EthereumRpc {
     }
   }
 
-  async sendAxelarBackup(cid: string) {
+  async sendAxelarBackupContract(cid: string) {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
       const signer = ethersProvider.getSigner();
 
-      const proxy = process.env.NEXT_PUBLIC_CONTRACT_GATEWAY_MUMBAI ?? "";
+      const gateway =
+        process.env.NEXT_PUBLIC_CONTRACT_AXELAR_GATEWAY_MUMBAI ?? "";
       const destination =
         process.env.NEXT_PUBLIC_CONTRACT_BACKUP_STORE_ARBITRUM_GOERLI ?? "";
 
@@ -112,14 +119,14 @@ export default class EthereumRpc {
 
       const cidBytes = this.cidStringToBytes(cid);
       const calldata = abiInterface.encodeFunctionData("callContract", [
-        "arbitrum",
+        EvmChain.ARBITRUM,
         destination,
         cidBytes,
       ]);
 
       // Submit transaction to the blockchain
       const tx = await signer.sendTransaction({
-        to: proxy,
+        to: gateway,
         maxFeePerGas: "6000000000", // Max fee per gas
         gasLimit: 8000000,
         data: calldata,
@@ -130,6 +137,32 @@ export default class EthereumRpc {
       console.log("Sent to Arbitrum via Axelar:");
       console.log(receipt);
       return receipt;
+    } catch (error) {
+      return error as string;
+    }
+  }
+
+  async sendAxelarBackupGas(txHash: string) {
+    try {
+      const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+      const api = new AxelarGMPRecoveryAPI({
+        environment: Environment.TESTNET,
+      });
+      const options: AddGasOptions = {
+        evmWalletDetails: { provider: ethersProvider },
+      };
+
+      const { success, transaction, error } = await api.addNativeGas(
+        EvmChain.POLYGON,
+        txHash,
+        options
+      );
+
+      console.log("Axelar: Added to gas service");
+      console.log(success);
+      console.log(error);
+
+      return transaction;
     } catch (error) {
       return error as string;
     }
