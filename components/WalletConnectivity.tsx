@@ -50,7 +50,7 @@ const WalletConnectivity = () => {
           My Contents
         </button>
         <hr />
-        <button onClick={logout} className="card bg-red white">
+        <button onClick={logout} className="card bg-red-100 white">
           Log Out
         </button>
       </div>

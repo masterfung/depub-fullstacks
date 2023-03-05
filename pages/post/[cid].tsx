@@ -48,22 +48,16 @@ const displayBytes = (bytes: number) => {
   return `${truncated(bytes / 1e9)}GB`;
 };
 
-const tipContent = (
+const tipContent = async (
   cid: string,
   tip: string,
   provider: SafeEventEmitterProvider
 ) => {
-  sendTip({
+  await sendTip({
     amountInEther: tip,
     cid,
     web3Provider: provider,
-  })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  });
 };
 
 const Post = () => {
