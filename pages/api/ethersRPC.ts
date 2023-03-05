@@ -88,7 +88,7 @@ export default class EthereumRpc {
       const tx = await signer.sendTransaction({
         to: destination,
         value: amount,
-        maxFeePerGas: "6000000000", // Max fee per gas
+        maxFeePerGas: "18000000000", // Max fee per gas
         gasLimit: 8000000,
         data: calldata,
       });
@@ -127,7 +127,7 @@ export default class EthereumRpc {
       // Submit transaction to the blockchain
       const tx = await signer.sendTransaction({
         to: gateway,
-        maxFeePerGas: "6000000000", // Max fee per gas
+        maxFeePerGas: "18000000000", // Max fee per gas
         gasLimit: 8000000,
         data: calldata,
       });
