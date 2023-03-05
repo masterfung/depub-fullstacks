@@ -73,7 +73,7 @@ export default class EthereumRpc {
       const abi = ["function tipContent(bytes32 cid) payable"];
       const abiInterface = new ethers.utils.Interface(abi);
 
-      const cidBytes = bs58.decode(params.cid).slice(2);
+      const cidBytes = this.cidStringToBytes(params.cid);
       const calldata = abiInterface.encodeFunctionData("tipContent", [
         cidBytes,
       ]);
@@ -94,6 +94,49 @@ export default class EthereumRpc {
     } catch (error) {
       return error as string;
     }
+  }
+
+  async sendAxelarBackup(cid: string) {
+    try {
+      const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+      const signer = ethersProvider.getSigner();
+
+      const proxy = process.env.NEXT_PUBLIC_CONTRACT_GATEWAY_MUMBAI ?? "";
+      const destination =
+        process.env.NEXT_PUBLIC_CONTRACT_BACKUP_STORE_ARBITRUM_GOERLI ?? "";
+
+      const abi = [
+        "function callContract(string calldata destinationChain,string calldata contractAddress, bytes calldata payload) external",
+      ];
+      const abiInterface = new ethers.utils.Interface(abi);
+
+      const cidBytes = this.cidStringToBytes(cid);
+      const calldata = abiInterface.encodeFunctionData("callContract", [
+        "arbitrum",
+        destination,
+        cidBytes,
+      ]);
+
+      // Submit transaction to the blockchain
+      const tx = await signer.sendTransaction({
+        to: proxy,
+        maxFeePerGas: "6000000000", // Max fee per gas
+        gasLimit: 8000000,
+        data: calldata,
+      });
+
+      // Wait for transaction to be mined
+      const receipt = await tx.wait();
+      console.log("Sent to Arbitrum via Axelar:");
+      console.log(receipt);
+      return receipt;
+    } catch (error) {
+      return error as string;
+    }
+  }
+
+  private cidStringToBytes(cid: string) {
+    return bs58.decode(cid).slice(2);
   }
 
   async getContentTips(cid: string) {

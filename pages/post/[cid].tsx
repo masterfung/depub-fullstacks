@@ -52,6 +52,7 @@ const displayBytes = (bytes: number) => {
 const tipContent = (
   cid: string,
   tip: string,
+  setReceivedTips: (tips: string) => void,
   provider: SafeEventEmitterProvider
 ) => {
   sendTip({
@@ -61,7 +62,25 @@ const tipContent = (
   })
     .then((res) => {
       console.log(res);
+      queryReceivedTips(cid, setReceivedTips, provider);
     })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+const queryReceivedTips = (
+  cid: string,
+  setReceivedTips: (tips: string) => void,
+  provider: SafeEventEmitterProvider
+) => {
+  console.log("Querying for Tip");
+  console.log(cid);
+  queryTip({
+    cid,
+    web3Provider: provider,
+  })
+    .then((res) => setReceivedTips(res))
     .catch((e) => {
       console.log(e);
     });
@@ -112,16 +131,7 @@ const Post = () => {
         console.log(e);
       });
     if (provider) {
-      console.log("Querying for Tip");
-      console.log(cid);
-      queryTip({
-        cid,
-        web3Provider: provider,
-      })
-        .then((res) => setReceivedTips(res))
-        .catch((e) => {
-          console.log(e);
-        });
+      queryReceivedTips(cid, setReceivedTips, provider);
     }
   }, [router.query, router.pathname, provider]);
 
@@ -264,7 +274,7 @@ const Post = () => {
                         const { cid } = (router.query as { cid: string }) || {
                           cid: "1",
                         };
-                        tipContent(cid, tip, provider);
+                        tipContent(cid, tip, setReceivedTips, provider);
                         closeModal();
                       }}
                     >
