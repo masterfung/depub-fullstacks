@@ -24,7 +24,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // eslint-disable-next-line
-  await CronScheduler.scheduleModeration(_req.body);
+  // await CronScheduler.scheduleModeration(_req.body);
 
   const timestamp = new Date().getTime() / 1000;
   try {
