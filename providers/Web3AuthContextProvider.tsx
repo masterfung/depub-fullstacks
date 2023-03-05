@@ -19,7 +19,6 @@ import RPC from "../pages/api/ethersRPC";
 import {
   RemoveProviderFromLocalStorage
 } from "../helper/localstorage";
-import WalletConnectivity from "../components/WalletConnectivity";
 import { uiConsole } from "../helper/utility";
 import { useRouter } from "next/router";
 
