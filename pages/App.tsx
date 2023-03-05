@@ -7,13 +7,16 @@ import SearchBar from "../components/SearchBar";
 import { CardsType } from "../types/app";
 import query from "../rest/query";
 import { useRouter } from "next/router";
+import Loading from "../components/Loading";
 
 function App() {
   const [cards, setCards] = useState<CardsType>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    setIsLoading(true);
     query(searchTerm)
       .then((res: object[]) => {
         setCards(
@@ -29,6 +32,7 @@ function App() {
             version: "0.0.0",
           }))
         );
+        setIsLoading(false);
       })
       .catch((e) => {
         setCards([]);
@@ -45,7 +49,7 @@ function App() {
         endpoint=""
       />
 
-      <Cards cards={cards} />
+      {isLoading ? <Loading /> : <Cards cards={cards} />}
     </Layout>
   );
 }

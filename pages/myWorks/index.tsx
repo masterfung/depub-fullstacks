@@ -7,7 +7,7 @@ import Layout from "../../components/Layout";
 
 const MyWorks = () => {
   const { account } = useContext(Web3AuthContext);
-  console.log("account", account);
+  console.log("MyWorks - account", account);
 
   return <div>{account ? "Protected View" : "Need to login to see"}</div>;
 };

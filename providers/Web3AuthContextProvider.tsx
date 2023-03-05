@@ -15,13 +15,14 @@ import {
 } from "react";
 
 import RPC from "../pages/api/ethersRPC";
-import { useRouter } from "next/router";
 import {
   RemoveProviderFromLocalStorage,
   SaveProviderToLocalStorage,
 } from "../helper/localstorage";
 import WalletConnectivity from "../components/WalletConnectivity";
 import { uiConsole } from "../helper/utility";
+import { useMemo } from "react";
+import { useRouter } from "next/router";
 
 const clientId =
   "BPuR_hLLiDhWiVxJ8MCwNmSLafxA5eHWipd9_hFhUneYihA-yahdHsXX3Dgt5buK46flgXsfg5cz2OJX9-PYIxo"; // get from https://dashboard.web3auth.io
@@ -61,6 +62,7 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
     null
   );
+  const router = useRouter();
   const [account, setAccount] = useState<undefined | string>(undefined);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -135,12 +137,12 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
 
     init()
       .then(() => {
-        console.log("yay");
+        console.log(":+1");
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [router.pathname]);
 
   const login = async () => {
     if (!web3auth) {
@@ -173,7 +175,7 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
     setProvider(null);
   };
 
-  const getChainId = async () => {
+  const getChainId = useCallback(async () => {
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -181,7 +183,8 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
     const rpc = new RPC(provider);
     const chainId = await rpc.getChainId();
     uiConsole(chainId);
-  };
+  }, [provider]);
+
   const getAccounts = useCallback(async () => {
     if (!provider) {
       uiConsole("provider not initialized yet");
@@ -193,7 +196,7 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
     return address;
   }, [provider]);
 
-  const getBalance = async () => {
+  const getBalance = useCallback(async () => {
     if (!provider) {
       uiConsole("provider not initialized yet");
       return;
@@ -201,7 +204,7 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
     const rpc = new RPC(provider);
     const balance = await rpc.getBalance();
     uiConsole(balance);
-  };
+  }, [provider]);
 
   useEffect(() => {
     void (async () => {
@@ -209,13 +212,15 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
       setAccount(addr);
     })();
   }, [getAccounts]);
+  
+  const memoAccount = useMemo(() => account, [account]);
 
   return (
     <Web3AuthContext.Provider
       value={{
         web3auth,
         provider,
-        account: account,
+        account: memoAccount,
         isOpen,
         login,
         getUserInfo,

@@ -7,7 +7,7 @@ import {
 
 const Pending = () => {
   const { account } = useContext(Web3AuthContext);
-  console.log("account from pending", account);
+  console.log("account from Pending", account);
   return <div>Pending {account}</div>;
 };
 

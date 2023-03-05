@@ -29,7 +29,6 @@ const Form = ({
   const { account } = useContext(Web3AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const outer = useRouter();
 
   function closeModal() {
     setIsOpen(false);
