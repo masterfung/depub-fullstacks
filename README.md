@@ -3,6 +3,7 @@
 We are building a decentralized successor to WikiLeaks to promote truth and transparency. Our product supports anonymous or known publishing with tips.
 
 Site of [FreePub](https://freepub.io)
+[FreePub Contracts](https://github.com/austinchandra/freepub-contracts)
 
 The contributors are:
 - Johnny Hung @masterfung
