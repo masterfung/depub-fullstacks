@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import DatabaseInsertClient from "./src/database/base/insert";
-import ContentCheck from "./src/moderation/contentcheck";
+import CronScheduler from "./src/cronjobs/CronScheduler";
 
 const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
-  const { title, description, author, directoryCID, fileNames } = _req.body;
+  const { title, description, author, directoryCID, files } = _req.body;
 
   const indexCollection = process.env.MONGODB_INDEX_COLLECTION ?? "";
   const insertClient = new DatabaseInsertClient(indexCollection);
@@ -18,7 +18,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // eslint-disable-next-line
-  const moderationStatus = await new ContentCheck().moderate(_req.body);
+  await CronScheduler.scheduleModeration(_req.body);
 
   const timestamp = new Date().getTime() / 1000;
   try {
@@ -27,8 +27,7 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       title: title as string,
       description: description as string,
       author: author as string,
-      fileNames: fileNames as string[],
-      moderationStatus: moderationStatus,
+      files: files as object[],
       timestamp,
     });
   } catch (e) {

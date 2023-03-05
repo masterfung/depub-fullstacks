@@ -1,23 +1,26 @@
 import ImageLabeler from "./labeling";
 import Moderation from "./moderation";
 
-interface Content {
+export interface Content {
   title: string;
   description: string;
   author: string;
   directoryCID: string;
-  fileNames: string[];
+  files: {
+    name: string;
+    size: number;
+  }[];
 }
 
 const maxArtifactLimit = 10;
 
-enum ModerationStatus {
+export enum ModerationStatus {
   NotStarted,
   NeedsReview,
   Passed,
 }
 
-export default class ContentCheck {
+export class ContentCheck {
   private labeler = new ImageLabeler();
   private moderation = new Moderation();
   private ipfsAddress = "https://ipfs.io/ipfs/";
@@ -26,16 +29,17 @@ export default class ContentCheck {
     const labelSet = new Set<string>();
     let status = ModerationStatus.NotStarted;
 
-    const filteredFiles = content.fileNames.filter((file) => {
-      const ext = file.split(".").pop() ?? "";
-      return !["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(
-        ext.toLowerCase()
-      );
-    });
+    const filteredFileNames = content.files
+      .map((f) => f.name)
+      .filter((fileName) => {
+        const ext = fileName.split(".").pop() ?? "";
+        return ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(
+          ext.toLowerCase()
+        );
+      });
 
-    //todo double check if the link in here makes sense
     const labelingRes = await Promise.all(
-      filteredFiles
+      filteredFileNames
         .slice(0, maxArtifactLimit)
         .map((img) =>
           this.labeler.getLabelsUrl(
@@ -44,7 +48,10 @@ export default class ContentCheck {
         )
     );
 
-    if (filteredFiles.length > 0 && labelingRes.every((res) => !res.success))
+    if (
+      filteredFileNames.length > 0 &&
+      labelingRes.every((res) => !res.success)
+    )
       return status;
 
     labelingRes
@@ -65,3 +72,4 @@ export default class ContentCheck {
     return status;
   };
 }
+

@@ -1,6 +1,7 @@
-import IPFSWriteClient from "../pages/api/src/ipfs/write";
+import axios from "axios";
+import indexContent from "./indexer";
 
-interface PublishParams {
+export interface PublishParams {
   title: string;
   description: string;
   author: string;
@@ -10,51 +11,36 @@ interface PublishParams {
 const publishContent = async (params: PublishParams) => {
   const { title, description, author, files } = params;
 
-  const client = new IPFSWriteClient();
-  const directoryParams = files.map((f) => ({
-    path: f.name,
-    content: f.stream(),
-  }));
+  const data = new FormData();
+  files.forEach((file) => {
+    data.append(`${file.name}${file.size}`, file);
+  });
 
-  // eslint-disable-next-line
-  // @ts-ignore
-  const result = client.writeDirectory(directoryParams);
+  const url = "api/publish";
 
-  let directoryCID = "";
-  const uploadedFileNames = [];
-  for await (const res of result) {
-    if (res.path === "") {
-      directoryCID = res.cid.toString();
-    }
-    uploadedFileNames.push(res.path);
-  }
+  const result = await axios({
+    url,
+    method: "POST",
+    data,
+  });
 
-  console.log("Directory CID:");
-  console.log(directoryCID);
-
-  if (directoryCID === "") {
+  if (result.status !== 200) {
     return "";
   }
 
-  const url = "api/indexer";
+  const filesMetadata = files.map((f) => ({
+    name: f.name,
+    size: f.size,
+  }));
+  const directoryCID = result.data as string;
 
-  const postResult = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title,
-      description,
-      author,
-      directoryCID,
-      fileNames: uploadedFileNames,
-    }),
+  return await indexContent({
+    title,
+    description,
+    author,
+    files: filesMetadata,
+    directoryCID,
   });
-
-  if (postResult.status === 200) {
-    return directoryCID;
-  }
-
-  return "";
 };
 
 export default publishContent;

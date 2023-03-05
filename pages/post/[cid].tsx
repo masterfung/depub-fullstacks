@@ -11,8 +11,7 @@ import {
 
 interface File {
   name: string;
-  size?: string;
-  format?: string;
+  size?: number;
   versions?: any[];
   publishedDate?: any;
 }
@@ -20,7 +19,7 @@ interface NetworkPost {
   title: string;
   description: string;
   author: string;
-  fileNames: string[];
+  files: File[];
 }
 
 interface ContentPost {
@@ -31,6 +30,20 @@ interface ContentPost {
   files: File[];
   tags?: any[];
 }
+
+const displayBytes = (bytes: number) => {
+  const truncated = (b: number) => Math.trunc(b * 100) / 100;
+  if (bytes < 1e3) {
+    return `${truncated(bytes)}B`;
+  }
+  if (bytes < 1e6) {
+    return `${truncated(bytes / 1e3)}KB`;
+  }
+  if (bytes < 1e9) {
+    return `${truncated(bytes / 1e6)}MB`;
+  }
+  return `${truncated(bytes / 1e9)}GB`;
+};
 
 const Post = () => {
   const router = useRouter();
@@ -48,16 +61,22 @@ const Post = () => {
         }
         const postData = res[0] as NetworkPost;
         console.log(postData);
+        const dirFile = {
+          name: "",
+        };
         setPost({
           id: cid,
           title: postData.title,
           description: postData.description,
           author: postData.author ?? "Anonymous",
-          files: postData.fileNames.map((fileName) => {
-            return {
-              name: fileName,
-            };
-          }),
+          files: [dirFile].concat(
+            postData.files.map((file) => {
+              return {
+                name: file.name,
+                size: file.size,
+              };
+            })
+          ),
         });
       })
       .catch((e) => {
@@ -98,6 +117,39 @@ const Post = () => {
           >
             {post?.author === "Anonymous" ? "Needs a Tip" : "Funded"}
           </span>
+        </div>
+        <p className="text-gray-600 mb-4">{post?.description}</p>
+        <div className="mb-4">
+          {post?.files && <span className="font-bold">Files:</span>}
+          <ul className="list-disc list-inside">
+            {post?.files?.map((file, index) => (
+              <li key={index}>
+                <button
+                  style={{
+                    textDecoration: "underline",
+                  }}
+                  onClick={async () => {
+                    await download(post.id, file.name);
+                  }}
+                >
+                  {file.name === "" ? `${post.id} (Directory)` : file.name}
+                </button>
+                {file.size && ` (${displayBytes(file.size)})`}
+                {file.versions && (
+                  <div className="ml-4">
+                    <span className="font-bold">Versions:</span>{" "}
+                    {file.versions?.join(", ")}
+                  </div>
+                )}
+                {file.publishedDate && (
+                  <div className="ml-4">
+                    <span className="font-bold">Published Date:</span>{" "}
+                    {file.publishedDate}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       <p className="text-gray-600 mb-4">{post?.description}</p>
