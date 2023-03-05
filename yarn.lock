@@ -1417,11 +1417,6 @@
   resolved "https://registry.npmjs.org/@types/semver/-/semver-7.3.13.tgz"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
 
-"@types/tinycolor2@^1.4.0":
-  version "1.4.3"
-  resolved "https://registry.npmjs.org/@types/tinycolor2/-/tinycolor2-1.4.3.tgz"
-  integrity sha512-Kf1w9NE5HEgGxCRyIcRXR/ZYtDv0V8FVPtYHwLxl0O+maGX0erE77pQlD0gpP+/KByMZ87mOA79SjifhSB3PjQ==
-
 "@types/uuid@^8.3.1":
   version "8.3.4"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
@@ -6800,19 +6795,6 @@ timeout-abort-controller@^3.0.0:
   integrity sha512-O3e+2B8BKrQxU2YRyEjC/2yFdb33slI22WRdUaDx6rvysfi9anloNZyR2q0l6LnePo5qH7gSM7uZtvvwZbc2yA==
   dependencies:
     retimer "^3.0.0"
-
-tinycolor2@^1.0.0:
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.6.0.tgz"
-  integrity sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==
-
-tinygradient@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.npmjs.org/tinygradient/-/tinygradient-1.1.5.tgz"
-  integrity sha512-8nIfc2vgQ4TeLnk2lFj4tRLvvJwEfQuabdsmvDdQPT0xlk9TaNtpGd6nNRxXoK6vQhN6RSzj+Cnp5tTQmpxmbw==
-  dependencies:
-    "@types/tinycolor2" "^1.4.0"
-    tinycolor2 "^1.0.0"
 
 to-regex-range@^5.0.1:
   version "5.0.1"

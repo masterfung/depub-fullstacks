@@ -45,7 +45,6 @@
     "react-dom": "18",
     "react-hook-form": "^7.43.3",
     "swr": "^2.0.4",
-    "tinygradient": "^1.1.5",
     "web3": "^1.8.2"
   },
   "devDependencies": {

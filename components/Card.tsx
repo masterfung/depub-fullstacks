@@ -1,38 +1,16 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Image from "next/image";
-import logo from "../public/beer.png";
 import { CardType } from "../types/app";
-import tinygradient from "tinygradient";
 import Link from "next/link";
 
 const Card = ({ data }: { data: CardType }) => {
-  const randomGradient = tinygradient(
-    "#fad687",
-    "#fee1a1",
-    "#66f8fa",
-    "#88f5f6"
-  );
-  const css = randomGradient.css();
-  // we are still missing upvotes and quoted by
-
-  const gradientClass = `gradient-${randomGradient}`;
-
   return (
     <Link href={`post/${data.id.toString()}`}>
       <div
         className="flex flex-col md:flex-row bg-white rounded-lg p-6 shadow-lg hover:scale-105 transition duration-300 ease-in-out cursor-pointer"
-        style={{ background: css }}
+        // style={{ background: css }}
       >
-        <div className="w-full md:w-1/3 mb-6 md:mb-0">
-          <Image
-            src={logo}
-            alt="Card Image"
-            height="80"
-            width="80"
-            className="rounded-lg"
-          />
-        </div>
         <div className="w-full md:flex-1 md:pl-6">
           <h2 className="text-xl font-semibold mb-2">{data.title}</h2>
           <p className="text-gray-600 mb-4">{data.description}</p>
