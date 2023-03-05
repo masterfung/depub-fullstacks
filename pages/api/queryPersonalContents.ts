@@ -17,7 +17,9 @@ const handler = async (_req: NextApiRequest, res: NextApiResponse) => {
       address,
     });
   } else {
-    results = await client.queryAgainstIndex(index, searchTerm, { author: address });
+    results = await client.queryAgainstIndex(index, searchTerm, {
+      author: address,
+    });
   }
 
   console.log(results);

@@ -24,7 +24,7 @@ const Pending = () => {
   const [isLoading, setIsLoading] = useState(false);
   console.log("account from Pending", account);
   const router = useRouter();
-  
+
   useEffect(() => {
     setIsLoading(true);
     query(searchTerm, STATUS.UNFUNDED)
@@ -50,8 +50,9 @@ const Pending = () => {
       });
   }, [searchTerm, router.pathname]);
 
-  return <>
-  <SearchBar
+  return (
+    <>
+      <SearchBar
         updateFunction={(search) => {
           setSearchTerm(search);
         }}
@@ -59,7 +60,8 @@ const Pending = () => {
       />
 
       {isLoading ? <Loading /> : <Cards cards={cards} />}
-  </>;
+    </>
+  );
 };
 
 const PendingPage = () => (

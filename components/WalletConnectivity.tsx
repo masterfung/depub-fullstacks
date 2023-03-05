@@ -28,7 +28,7 @@ const WalletConnectivity = () => {
 
   const getMyWorks = () => {
     void router.push("/myWorks");
-  }
+  };
 
   const loggedInView = (
     <>
