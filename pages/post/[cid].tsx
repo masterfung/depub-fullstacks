@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "../../components/Layout";
 import { useRouter } from "next/router";
+import sendTip from "../../rest/tip";
 
 import queryByCID from "../../rest/queryByCID";
 import download from "../../rest/download";
@@ -48,7 +49,7 @@ const displayBytes = (bytes: number) => {
 const Post = () => {
   const router = useRouter();
   const [post, setPost] = useState<ContentPost | undefined>();
-  const { account } = useWeb3AuthContext();
+  const { account, provider } = useWeb3AuthContext();
 
   console.log("account from POST", account);
 
@@ -110,46 +111,46 @@ const Post = () => {
           <span className="text-gray-600">{post?.author}</span>
         </div>
         <div className="w-1/2 text-right">
-          <span
-            className={` ${
-              post?.author === "Anonymous" ? "bg-gray-400" : "bg-green-800"
-            } text-white rounded-lg px-2 py-2 text-sm font-medium`}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "right",
+            }}
           >
-            {post?.author === "Anonymous" ? "Needs a Tip" : "Funded"}
-          </span>
-        </div>
-        <p className="text-gray-600 mb-4">{post?.description}</p>
-        <div className="mb-4">
-          {post?.files && <span className="font-bold">Files:</span>}
-          <ul className="list-disc list-inside">
-            {post?.files?.map((file, index) => (
-              <li key={index}>
-                <button
-                  style={{
-                    textDecoration: "underline",
-                  }}
-                  onClick={async () => {
-                    await download(post.id, file.name);
-                  }}
-                >
-                  {file.name === "" ? `${post.id} (Directory)` : file.name}
-                </button>
-                {file.size && ` (${displayBytes(file.size)})`}
-                {file.versions && (
-                  <div className="ml-4">
-                    <span className="font-bold">Versions:</span>{" "}
-                    {file.versions?.join(", ")}
-                  </div>
-                )}
-                {file.publishedDate && (
-                  <div className="ml-4">
-                    <span className="font-bold">Published Date:</span>{" "}
-                    {file.publishedDate}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+            <span
+              className={` ${
+                post?.author === "Anonymous" ? "bg-gray-400" : "bg-green-800"
+              } text-white rounded-lg px-2 py-2 text-sm font-medium mr-2`}
+            >
+              {post?.author === "Anonymous" ? "Needs a Tip" : "Funded"}
+            </span>
+            <button
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+              onClick={() => {
+                const { cid } = (router.query as { cid: string }) || {
+                  cid: "1",
+                };
+                if (provider === null) {
+                  console.log("Null provider, cannot tip");
+                  return;
+                }
+                sendTip({
+                  amountInEther: "0.001",
+                  cid,
+                  web3Provider: provider,
+                })
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+              }}
+            >
+              Tip
+            </button>
+          </div>
         </div>
       </div>
       <p className="text-gray-600 mb-4">{post?.description}</p>
@@ -168,11 +169,7 @@ const Post = () => {
               >
                 {file.name === "" ? `${post.id} (Directory)` : file.name}
               </button>
-              {file.size && (
-                <>
-                  ({file.size}, {file.format})
-                </>
-              )}
+              {file.size && <>{` (${displayBytes(file.size)})`}</>}
               {file.versions && (
                 <div className="ml-4">
                   <span className="font-bold">Versions:</span>{" "}

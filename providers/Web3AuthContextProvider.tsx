@@ -12,6 +12,7 @@ import {
   useCallback,
   ReactElement,
   useContext,
+  useMemo,
 } from "react";
 
 import RPC from "../pages/api/ethersRPC";
@@ -21,7 +22,6 @@ import {
 } from "../helper/localstorage";
 import WalletConnectivity from "../components/WalletConnectivity";
 import { uiConsole } from "../helper/utility";
-import { useMemo } from "react";
 import { useRouter } from "next/router";
 
 const clientId =
@@ -108,8 +108,8 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
           sessionTime: 86400, // 1 day in seconds
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x89",
-            rpcTarget: "https://rpc-mainnet.matic.network", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+            chainId: "0x13881",
+            rpcTarget: "https://rpc-mumbai.maticvigil.com", // This is the public RPC we have added, please pass on your own endpoint while creating an app
           },
           web3AuthNetwork: "cyan",
         });
@@ -212,7 +212,7 @@ export const Web3AuthContextProvider: React.FC<{ children?: ReactElement }> = ({
       setAccount(addr);
     })();
   }, [getAccounts]);
-  
+
   const memoAccount = useMemo(() => account, [account]);
 
   return (
