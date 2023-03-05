@@ -8,10 +8,11 @@ interface TipParams {
 }
 
 const sendTip = async (params: TipParams) => {
-  const rpc = new RPC(params.web3Provider);
+  const { amountInEther, cid, web3Provider } = params;
+  const rpc = new RPC(web3Provider);
   const result = await rpc.sendTipTransaction({
-    amountInEther: params.amountInEther,
-    cid: params.cid,
+    amountInEther,
+    cid,
   });
 
   if (typeof result === "string") {
@@ -25,6 +26,24 @@ const sendTip = async (params: TipParams) => {
     console.log("Transaction reverted");
     return;
   }
+
+  await updateIndex(cid);
+};
+
+const updateIndex = async (cid: string) => {
+  const url = `../api/updateIndexStatus?directoryCID=${cid}&status=FUNDED`;
+  console.log(`URL`);
+  console.log(url);
+
+  const result = await fetch(url, {
+    method: "GET",
+  });
+
+  if (result.status !== 200) {
+    return;
+  }
+
+  return true;
 };
 
 export default sendTip;

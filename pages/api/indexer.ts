@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import DatabaseInsertClient from "./src/database/base/insert";
 import CronScheduler from "./src/cronjobs/CronScheduler";
 
-enum STATUS {
+export enum STATUS {
   UNFUNDED = "UNFUNDED",
   FUNDED = "FUNDED",
   BLACKLISTED = "BLACKLISTED",
