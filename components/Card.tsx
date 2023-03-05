@@ -17,7 +17,7 @@ const Card = ({ data }: { data: CardType }) => {
           <div className="flex items-center justify-between">
             <p className="text-gray-700 font-medium">{data.author}</p>
             <span className="bg-gray-200 text-gray-700 rounded-lg px-2 py-1 text-sm font-medium">
-              {data.version}
+              {`v${data.version}`}
             </span>
           </div>
         </div>
