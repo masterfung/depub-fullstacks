@@ -16,12 +16,15 @@ import {
 } from "react";
 
 import RPC from "../pages/api/ethersRPC";
-import { RemoveProviderFromLocalStorage } from "../helper/localstorage";
+import {
+  RemoveProviderFromLocalStorage
+} from "../helper/localstorage";
 import WalletConnectivity from "../components/WalletConnectivity";
 import { uiConsole } from "../helper/utility";
 import { useRouter } from "next/router";
 
-const clientId = process.env.WEB3AUTH_CLIENT_ID!; // get from https://dashboard.web3auth.io
+const clientId =
+  "BPuR_hLLiDhWiVxJ8MCwNmSLafxA5eHWipd9_hFhUneYihA-yahdHsXX3Dgt5buK46flgXsfg5cz2OJX9-PYIxo"; // get from https://dashboard.web3auth.io
 
 type Web3AuthContextType = {
   web3auth: Web3Auth | null;
