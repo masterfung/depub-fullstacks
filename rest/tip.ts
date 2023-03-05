@@ -14,7 +14,17 @@ const sendTip = async (params: TipParams) => {
     cid: params.cid,
   });
 
-  console.log(result);
+  if (typeof result === "string") {
+    // Handle error
+    console.log(`Could not tip content: ${result}`);
+    return;
+  }
+
+  if (result.status === 0) {
+    // Handle error
+    console.log("Transaction reverted");
+    return;
+  }
 };
 
 export default sendTip;

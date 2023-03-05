@@ -59,7 +59,7 @@ export default class EthereumRpc {
     }
   }
 
-  async sendTipTransaction(params: TipTxParams): Promise<any> {
+  async sendTipTransaction(params: TipTxParams) {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
       const signer = ethersProvider.getSigner();
